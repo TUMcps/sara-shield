@@ -686,8 +686,18 @@ TEST_F(RobotReachSchunkTest, ReflectedMassTest) {
   EXPECT_NEAR(reflected_mass, expected_reflected_mass, 1e-4);
 }
 
+TEST_F(RobotReachSchunkTest, ReflectedMassTest2) {
+  std::vector<double> q = {0.0, 3.0/16.0*M_PI, -5.0/8.0 * M_PI, 0.0, 5.0/16.0*M_PI, 0.0};
+  robot_reach_->calculateAllTransformationMatricesAndCapsules(q);
+  Eigen::Matrix<double, 3, 3> inv_mass_matrix = robot_reach_->calculateInvMassMatrixEEF();
+  Eigen::Matrix<double, 3, 3> mass_matrix = inv_mass_matrix.inverse();
+  double reflected_mass = robot_reach_->calculateReflectedMass(inv_mass_matrix, Eigen::Vector3d(0.0, -1.0, 0.0));
+  double expected_reflected_mass = 6.01765;
+  EXPECT_NEAR(reflected_mass, expected_reflected_mass, 1e-4);
+}
+
 TEST_F(RobotReachSchunkTest, RobotEnergyTest) {
-  std::vector<double> q = {0, 1.5, -0.4, 1.6, -1.5, 0.0};  // Some value that is no singularity
+  std::vector<double> q = {0, 1.5, -0.4, 1.6, -1.5, 0.0};
   robot_reach_->calculateAllTransformationMatricesAndCapsules(q);
   Eigen::Vector<double, Eigen::Dynamic> dq = Eigen::Vector<double, Eigen::Dynamic>::Zero(6);
   dq[0] = 0.65;
@@ -695,8 +705,19 @@ TEST_F(RobotReachSchunkTest, RobotEnergyTest) {
   EXPECT_NEAR(robot_energy, 0.3838269, 1e-4);
 }
 
+TEST_F(RobotReachSchunkTest, RobotEnergyTest2) {
+  std::vector<double> q = {0.0, 3.0/16.0*M_PI, -5.0/8.0 * M_PI, 0.0, 5.0/16.0*M_PI, 0.0};
+  robot_reach_->calculateAllTransformationMatricesAndCapsules(q);
+  Eigen::Vector<double, Eigen::Dynamic> dq = Eigen::Vector<double, Eigen::Dynamic>::Zero(6);
+  dq[1] = 0.284;
+  dq[2] = 0.80;
+  dq[4] = -0.284;
+  double robot_energy = robot_reach_->calculateEEFKineticEnergy(dq);
+  EXPECT_NEAR(robot_energy, 0.0376, 1e-4);
+}
+
 TEST_F(RobotReachSchunkTest, MaxReflectedMassTest) {
-  std::vector<double> q = {0.2, 0.4, -0.32, 0.86, 0.926, 1.3};  // Some value that is no singularity
+  std::vector<double> q = {0.2, 0.4, -0.32, 0.86, 0.926, 1.3}; 
   robot_reach_->calculateAllTransformationMatricesAndCapsules(q);
   std::vector<double> max_reflected_masses = robot_reach_->calculateAllMaxReflectedMasses();
   double sum_of_link_masses = 13.79;
@@ -704,7 +725,7 @@ TEST_F(RobotReachSchunkTest, MaxReflectedMassTest) {
 }
 
 TEST_F(RobotReachSchunkTest, CalculateRobotLinkReflectedMassesPerTimeIntervalTest) {
-  std::vector<double> q = {0.2, 0.4, -0.32, 0.86, 0.926, 1.3};  // Some value that is no singularity
+  std::vector<double> q = {0.2, 0.4, -0.32, 0.86, 0.926, 1.3};
   std::vector<double> dq = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   Motion m(0.0, q, dq, 0.0);
   std::vector<Motion> motion_vec = {m};

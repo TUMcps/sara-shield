@@ -19,7 +19,7 @@ std::vector<reach_lib::Point> get_human_measurement_far() {
   dummy_human_meas[2] =  reach_lib::Point(10.0, 10.0, 10.0);
   dummy_human_meas[3] =  reach_lib::Point(10.0, 10.0, 10.0);
   dummy_human_meas[4] =  reach_lib::Point(10.0, 10.0, 10.0);
-  dummy_human_meas[5] =  reach_lib::Point(0.0, 0.0, 2.0);
+  dummy_human_meas[5] =  reach_lib::Point(0.16, -0.69, -0.05);
   dummy_human_meas[6] =  reach_lib::Point(10.0, 10.0, 10.0);
   dummy_human_meas[7] =  reach_lib::Point(10.0, 10.0, 10.0);
   dummy_human_meas[8] =  reach_lib::Point(10.0, 10.0, 10.0);
@@ -54,6 +54,20 @@ std::vector<reach_lib::Point> get_human_measurement_clamp() {
   return dummy_human_meas;
 }
 
+std::vector<reach_lib::Point> get_human_measurement_pendulum() {
+  std::vector<reach_lib::Point> dummy_human_meas(9);
+  dummy_human_meas[0] =  reach_lib::Point(10.0, 10.0, 10.0);
+  dummy_human_meas[1] =  reach_lib::Point(10.0, 10.0, 10.0);
+  dummy_human_meas[2] =  reach_lib::Point(10.0, 10.0, 10.0);
+  dummy_human_meas[3] =  reach_lib::Point(10.0, 10.0, 10.0);
+  dummy_human_meas[4] =  reach_lib::Point(10.0, 10.0, 10.0);
+  dummy_human_meas[5] =  reach_lib::Point(0.16, -0.69, -0.05);
+  dummy_human_meas[6] =  reach_lib::Point(10.0, 10.0, 10.0);
+  dummy_human_meas[7] =  reach_lib::Point(10.0, 10.0, 10.0);
+  dummy_human_meas[8] =  reach_lib::Point(10.0, 10.0, 10.0);
+  return dummy_human_meas;
+}
+
 int main() {
   double sample_time = 0.004;
   std::string trajectory_config_file = std::string("../config/trajectory_parameters_schunk.yaml");
@@ -67,7 +81,7 @@ int main() {
   double init_yaw = -M_PI_2;
   std::vector<double> init_qpos = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   reach_lib::AABB table = reach_lib::AABB({-1.50, -0.88, init_z - 0.2}, {1.05, 1.0, init_z - 0.176});
-  std::vector<reach_lib::AABB> environment_elements = {table};
+  std::vector<reach_lib::AABB> environment_elements = {}; //{table};
   safety_shield::ShieldType shield_type = safety_shield::ShieldType::PFL;
 
   safety_shield::SafetyShield shield =
@@ -75,6 +89,11 @@ int main() {
                                   init_y, init_z, init_roll, init_pitch, init_yaw, init_qpos, environment_elements, shield_type);
 
   std::vector<std::vector<double>> desired_goals_pendulum = {
+    {-1.4, 1.5, -0.4, M_PI_2, -M_PI_2, 0.0},
+    {0.3, 1.5, -0.4, M_PI_2, -M_PI_2, 0.0},
+    {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+  };
+  std::vector<std::vector<double>> desired_goals_pendulum_2 = {
     {1.0, 0.0, 0.0, 0.3, 0.5, 1.0},
     {1.0, 1.4, 0.0, -0.6, 0.3, 0.0},
     {0.0, 0.5, -0.9, 0.0, 0.0, 0.0},
@@ -89,8 +108,8 @@ int main() {
   };
 
   // Define scenario
-  std::vector<std::vector<double>> desired_goals = desired_goals_clamping_table;
-  auto human_measurement = get_human_measurement_clamp();
+  std::vector<std::vector<double>> desired_goals = desired_goals_pendulum;
+  auto human_measurement = get_human_measurement_pendulum();
 
   // n = shield_frequency / RL_frequency = 5 / 250 = 1 / 50
   spdlog::info("Debug started.");

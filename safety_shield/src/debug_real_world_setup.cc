@@ -54,6 +54,20 @@ std::vector<reach_lib::Point> get_human_measurement_clamp() {
   return dummy_human_meas;
 }
 
+std::vector<reach_lib::Point> get_human_measurement_clamp_2() {
+  std::vector<reach_lib::Point> dummy_human_meas(9);
+  dummy_human_meas[0] =  reach_lib::Point(0.0, -10.0, 0.0);
+  dummy_human_meas[1] =  reach_lib::Point(0.0, -10.0, 0.0);
+  dummy_human_meas[2] =  reach_lib::Point(0.0, -10.0, 0.0);
+  dummy_human_meas[3] =  reach_lib::Point(0.0, -10.0, 0.0);
+  dummy_human_meas[4] =  reach_lib::Point(0.0, -10.0, 0.0);
+  dummy_human_meas[5] =  reach_lib::Point(0.0, -10.0, 0.0);
+  dummy_human_meas[6] =  reach_lib::Point(0.3717, -0.5504, -0.2033);
+  dummy_human_meas[7] =  reach_lib::Point(0.0, -10.0, 0.0);
+  dummy_human_meas[8] =  reach_lib::Point(0.0, -10.0, 0.0);
+  return dummy_human_meas;
+}
+
 std::vector<reach_lib::Point> get_human_measurement_pendulum() {
   std::vector<reach_lib::Point> dummy_human_meas(9);
   dummy_human_meas[0] =  reach_lib::Point(10.0, 10.0, 10.0);
@@ -107,9 +121,19 @@ int main() {
     {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
   };
 
+  std::vector<std::vector<double>> desired_goals_clamping_table_2 = {
+    {0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
+    {0.65, 1.15, -1.15, 0.0, -0.9, 0.0},
+    {0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
+    {-0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
+    {-0.65, 1.15, -1.15, 0.0, -0.9, 0.0},
+    {-0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
+    {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+  };
+
   // Define scenario
-  std::vector<std::vector<double>> desired_goals = desired_goals_pendulum;
-  auto human_measurement = get_human_measurement_pendulum();
+  std::vector<std::vector<double>> desired_goals = desired_goals_clamping_table_2;
+  auto human_measurement = get_human_measurement_clamp_2();
 
   // n = shield_frequency / RL_frequency = 5 / 250 = 1 / 50
   spdlog::info("Debug started.");

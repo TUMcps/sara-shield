@@ -219,8 +219,9 @@ int main() {
   std::vector<std::vector<reach_lib::Point>> human_measurements;
   std::vector<double> time;
   // Recording is in 1000 Hz but sample time is 0.006 s
-  int input_freq = 3;
-  std::string file_name = "out_sim_ssm_near_mocap";
+  int input_freq = 6;
+  // std::string file_name = "out_sim_ssm_near_mocap";
+  std::string file_name = "out_ssm_jakob_mocap";
   get_meas_from_file("../data/" + file_name + ".csv", input_freq, time, human_measurements);
 
   // n = shield_frequency / RL_frequency = 5 / 250 = 1 / 50

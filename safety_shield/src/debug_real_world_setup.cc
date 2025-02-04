@@ -61,8 +61,8 @@ std::vector<reach_lib::Point> get_human_measurement_clamp_2() {
   dummy_human_meas[2] =  reach_lib::Point(0.0, -10.0, 0.0);
   dummy_human_meas[3] =  reach_lib::Point(0.0, -10.0, 0.0);
   dummy_human_meas[4] =  reach_lib::Point(0.0, -10.0, 0.0);
-  dummy_human_meas[5] =  reach_lib::Point(0.0, -10.0, 0.0);
-  dummy_human_meas[6] =  reach_lib::Point(0.3717, -0.5504, -0.2033);
+  dummy_human_meas[5] =  reach_lib::Point(0.3717, -0.5504, -0.2033);
+  dummy_human_meas[6] =  reach_lib::Point(0.0, -10.0, 0.0);
   dummy_human_meas[7] =  reach_lib::Point(0.0, -10.0, 0.0);
   dummy_human_meas[8] =  reach_lib::Point(0.0, -10.0, 0.0);
   return dummy_human_meas;
@@ -95,7 +95,7 @@ int main() {
   double init_yaw = -M_PI_2;
   std::vector<double> init_qpos = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   reach_lib::AABB table = reach_lib::AABB({-1.50, -0.88, init_z - 0.2}, {1.05, 1.0, init_z - 0.176});
-  std::vector<reach_lib::AABB> environment_elements = {}; //{table};
+  std::vector<reach_lib::AABB> environment_elements = {table};
   safety_shield::ShieldType shield_type = safety_shield::ShieldType::PFL;
 
   safety_shield::SafetyShield shield =
@@ -125,9 +125,11 @@ int main() {
     {0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
     {0.65, 1.15, -1.15, 0.0, -0.9, 0.0},
     {0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
-    {-0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
-    {-0.65, 1.15, -1.15, 0.0, -0.9, 0.0},
-    {-0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
+    {0.65, 1.15, -1.15, 0.0, -0.9, 0.0},
+    {0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
+    //{-0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
+    //{-0.65, 1.15, -1.15, 0.0, -0.9, 0.0},
+    //{-0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
     {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
   };
 

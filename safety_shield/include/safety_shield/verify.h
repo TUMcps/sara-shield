@@ -29,6 +29,12 @@
 
 namespace safety_shield {
 
+enum class CollisionType {
+	NONE,
+	UNCONSTRAINT,
+	CONSTRAINT
+};
+
 /**
  * @brief Verifies if a given robot motion is safe with respect to a humans motion
  */
@@ -143,7 +149,8 @@ class Verify {
       std::vector<std::vector<std::vector<RobotReach::CapsuleVelocity>>::const_iterator> robot_capsule_velocities_it,
       std::vector<std::vector<std::vector<RobotReach::CapsuleVelocity>>::const_iterator> robot_capsule_velocities_end,
       std::vector<double> velocity_errors,  
-      int& collision_index) = 0;
+      int& collision_index,
+      CollisionType& collision_type) = 0;
 
   /**
    * @brief Verify the robot motion against the reachable occupancy of the human for each separate time interval

@@ -186,7 +186,8 @@ class VerifyISO : public Verify {
       std::vector<std::vector<std::vector<RobotReach::CapsuleVelocity>>::const_iterator> robot_capsule_velocities_it,
       std::vector<std::vector<std::vector<RobotReach::CapsuleVelocity>>::const_iterator> robot_capsule_velocities_end,
       std::vector<double> velocity_errors,  
-      int& collision_index);
+      int& collision_index,
+      CollisionType& collision_type);
 
   /**
    * @brief Verify the robot motion against the reachable occupancy of the human for each separate time interval

@@ -71,7 +71,8 @@ bool VerifyISO::verifyHumanReachEnergyContactCases(const std::vector<std::vector
     std::vector<std::vector<std::vector<RobotReach::CapsuleVelocity>>::const_iterator> robot_capsule_velocities_it,
     std::vector<std::vector<std::vector<RobotReach::CapsuleVelocity>>::const_iterator> robot_capsule_velocities_end,
     std::vector<double> velocity_errors,  
-    int& collision_index) {
+    int& collision_index,
+    CollisionType& collision_type) {
   std::vector<std::vector<double>> dq;
   for (const auto& motion : motions) {
     dq.push_back(motion.getVelocity());
@@ -97,14 +98,17 @@ bool VerifyISO::verifyHumanReachEnergyContactCases(const std::vector<std::vector
       );
       if (!checkContactEnergySafetyIndividualLinks(unconstrained_collisions, robot_link_energies[t], max_contact_energies_unconstrained, m)) {
         collision_index = t;
+        collision_type = CollisionType::UNCONSTRAINT;
         return false;
       }
       if (!checkContactEnergySafetyIndividualLinks(constrained_collisions, robot_link_energies[t], max_contact_energies_constrained, m)) {
         collision_index = t;
+        collision_type = CollisionType::CONSTRAINT;
         return false;
       }
     }
   }
+  collision_type = CollisionType::NONE;
   return true;                        
 }
 

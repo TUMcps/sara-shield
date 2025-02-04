@@ -57,6 +57,7 @@ SafetyShield::SafetyShield(int nb_joints, double sample_time, double max_s_stop,
   ltp_ = long_term_planner::LongTermPlanner(nb_joints, sample_time, q_min, q_max, v_max_allowed, a_max_path, j_max_path);
   reachability_set_duration_ = reachability_set_interval_size_ * sample_time_;
   buildMaxContactEnergies();
+  current_collision_type_ = CollisionType::NONE;
   spdlog::info("Safety shield created.");
 }
 
@@ -126,6 +127,7 @@ SafetyShield::SafetyShield(double sample_time, std::string trajectory_config_fil
   }
   Motion goal_motion = computesPotentialTrajectory(is_safe_, prev_dq);
   next_motion_ = determineNextMotion(is_safe_);
+  current_collision_type_ = CollisionType::NONE;
   spdlog::info("Safety shield created.");
 }
 
@@ -714,7 +716,9 @@ bool SafetyShield::verifyContactEnergySafetyByContactType(std::vector<double> ti
     vel_cap_start,
     vel_cap_end,
     velocity_errors,
-    collision_index);
+    collision_index,
+    current_collision_type_
+  );
 }
 
 void SafetyShield::buildRobotVelocityPointers(

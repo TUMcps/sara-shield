@@ -341,6 +341,8 @@ class SafetyShield {
    */
   double planning_qpos_tolerance_ = 0.01;
 
+  CollisionType current_collision_type_;
+
  protected:
   /**
    * @brief Calculate max acceleration and jerk based on previous velocity
@@ -779,6 +781,10 @@ class SafetyShield {
 
   inline bool getSafety() {
     return is_safe_;
+  }
+
+  inline CollisionType getCollisionType() {
+	  return current_collision_type_;
   }
 
   inline ShieldType getShieldType() {

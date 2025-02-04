@@ -156,13 +156,15 @@ class Motion {
   /**
    * @brief Check if this motion is at a complete stop (v, a, j) = 0 for all nb_modules_.
    *
-   * @param threshold Threshold for numerical impercision
+   * @param threshold_vel Velocity threshold
+   * @param threshold_acc Acceleration threshold
+   * @param threshold_jerk Jerk threshold (should be selected higher than the max. allowed jerk usually)
    * @return true when motion is at a complete stop
    * @return false when motion is not at a complete stop
    */
-  inline bool isStopped(double threshold = 1e-4) const {
+  inline bool isStopped(double threshold_vel = 1e-4, double threshold_acc = 1e-1, double threshold_jerk = 10000) const {
     for (int i = 0; i < nb_modules_; i++) {
-      if (std::abs(dq_[i]) > threshold || std::abs(ddq_[i]) > threshold || std::abs(dddq_[i]) > threshold) {
+      if (std::abs(dq_[i]) > threshold_vel || std::abs(ddq_[i]) > threshold_acc || std::abs(dddq_[i]) > threshold_jerk) {
         return false;
       }
     }

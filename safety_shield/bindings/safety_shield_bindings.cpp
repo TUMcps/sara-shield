@@ -38,7 +38,7 @@ PYBIND11_MODULE(safety_shield_py, handle) {
       py::arg("time"), py::arg("q"), py::arg("dq"), py::arg("ddq"), py::arg("s") = 0.0)
     .def(py::init<double, std::vector<double>, std::vector<double>,std::vector<double>, std::vector<double>, double>(), 
       py::arg("time"), py::arg("q"), py::arg("dq"), py::arg("ddq"), py::arg("dddq"), py::arg("s") = 0.0)
-    .def("isStopped", &safety_shield::Motion::isStopped, py::arg("threshold") = 1e-4)
+    .def("isStopped", &safety_shield::Motion::isStopped, py::arg("threshold_vel") = 1e-4, py::arg("threshold_acc") = 1e-1, py::arg("threshold_jerk") = 10000)
     .def("hasSamePos", &safety_shield::Motion::hasSamePos, py::arg("motion"), py::arg("threshold") = 1e-4)
     .def("hasSameVel", &safety_shield::Motion::hasSameVel, py::arg("motion"), py::arg("threshold") = 1e-4)
     .def("hasSameAcc", &safety_shield::Motion::hasSameAcc, py::arg("motion"), py::arg("threshold") = 1e-4)
@@ -144,7 +144,7 @@ PYBIND11_MODULE(safety_shield_py, handle) {
       py::arg("eef_contact_type") = safety_shield::ContactType::EDGE)
     .def("step", &safety_shield::SafetyShield::step, py::arg("cycle_begin_time"))
     .def("newLongTermTrajectory", &safety_shield::SafetyShield::newLongTermTrajectory, py::arg("goal_position"), py::arg("goal_velocity"))
-    .def("setLongTermTrajectory", &safety_shield::SafetyShield::setLongTermTrajectory, py::arg("traj"))
+    .def("setLongTermTrajectory", &safety_shield::SafetyShield::setLongTermTrajectory, py::arg("traj"), py::arg("force") = false)
     .def("setEEFContactType", &safety_shield::SafetyShield::setEEFContactType, py::arg("contact_type"))
     .def("humanMeasurement", static_cast<void (safety_shield::SafetyShield::*)(const std::vector<std::vector<double>> human_measurement, double time)>(&safety_shield::SafetyShield::humanMeasurement), py::arg("human_measurement"), py::arg("time"))
     .def("getRobotReachCapsules", &safety_shield::SafetyShield::getRobotReachCapsules)

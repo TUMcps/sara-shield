@@ -593,7 +593,8 @@ void SafetyShield::newGoalPlanning(Motion& current_motion) {
       current_motion.getVelocity(),
       current_motion.getAcceleration(), 
       new_goal_motion_.getAngle(),
-      new_long_term_trajectory_
+      new_long_term_trajectory_,
+      path_s_
     );
   }
   // A replanning happend, so set the last replan position to the current position
@@ -809,32 +810,101 @@ void SafetyShield::newLongTermTrajectory(const std::vector<double>& goal_positio
   }
 }
 
-void SafetyShield::setLongTermTrajectory(LongTermTraj& traj) {
+void SafetyShield::setLongTermTrajectory(LongTermTraj& traj, bool force) {
   Motion current_motion = getCurrentMotion();
   // Check if robot is at stop
-  if (!current_motion.isStopped()) {
-    throw RobotMovementException();
+  if (force) {
+    // Replace LTT
+    new_long_term_trajectory_ = traj;
+    new_ltt_ = true;
+    new_ltt_processed_ = true;
+    return;
+  }
+  if (!current_motion.isStopped(1e-2, 0.5, j_max_allowed_[0] + 1)) {
+    std::stringstream ss;
+    ss << "Robot is not at a complete stop. Current velocity is [";
+    for (size_t i = 0; i < current_motion.getVelocity().size(); ++i) {
+      if (i != 0) ss << ",";
+      ss << current_motion.getVelocity()[i];
+    }
+    ss << "]. \n";
+    ss << "Current Acceleration is [";
+    for (size_t i = 0; i < current_motion.getAcceleration().size(); ++i) {
+      if (i != 0) ss << ",";
+      ss << current_motion.getAcceleration()[i];
+    }
+    ss << "]. \n";
+    ss << "Current Jerk is [";
+    for (size_t i = 0; i < current_motion.getJerk().size(); ++i) {
+      if (i != 0) ss << ",";
+      ss << current_motion.getJerk()[i];
+    }
+    ss << "]. \n";
+    std::string s = ss.str();
+    throw TrajectoryException(s);
   }
   Motion start = traj.getNextMotionAtIndex(0);
   // Check if traj starts at the same position
-  if (!current_motion.hasSamePos(&start)) {
-    throw TrajectoryException("Given LTT does not start at current robot position.");
+  if (!current_motion.hasSamePos(&start, 1e-2)) {
+    std::stringstream ss;
+    ss << "Current and start position are not the same. Current position is [";
+    for (size_t i = 0; i < current_motion.getAngle().size(); ++i) {
+      if (i != 0) ss << ",";
+      ss << current_motion.getAngle()[i];
+    }
+    ss << "]. \n";
+    ss << "Start position is [";
+    for (size_t i = 0; i < start.getAngle().size(); ++i) {
+      if (i != 0) ss << ",";
+      ss << start.getAngle()[i];
+    }
+    ss << "]. \n";
+    std::string s = ss.str();
+    throw TrajectoryException(s);
   }
   // Check if traj starts at v=0
-  if (!current_motion.hasSameVel(&start)) {
+  if (!current_motion.hasSameVel(&start, 1e-2)) {
     std::stringstream ss;
-    ss << "Given LTT does not start with velocity 0.0. Start velocity is [";
+    ss << "Current and start velocity are not the same. Current velocity is [";
+    for (size_t i = 0; i < current_motion.getVelocity().size(); ++i) {
+      if (i != 0) ss << ",";
+      ss << current_motion.getVelocity()[i];
+    }
+    ss << "]. \n";
+    ss << "Start Velocity is [";
     for (size_t i = 0; i < start.getVelocity().size(); ++i) {
       if (i != 0) ss << ",";
       ss << start.getVelocity()[i];
     }
-    ss << "].";
+    ss << "]. \n";
     std::string s = ss.str();
     throw TrajectoryException(s);
   }
+
+  Motion traj_end_motion = traj.getMotion(traj.getLength() - 1);
   // Check if traj ends in stop
-  if (!traj.getNextMotionAtIndex(traj.getLength() - 1).isStopped()) {
-    throw TrajectoryException("Given LTT does not end in a complete stop of the robot (v = a = j = 0.0)");
+  if (!traj_end_motion.isStopped(1e-4, 1e-1, j_max_ltt_[0] + 1e-4)) {
+    std::stringstream ss;
+    ss << "Given LTT does not end in a complete stop of the robot(v = a = j = 0.0). Start velocity is [";
+    for (size_t i = 0; i < traj_end_motion.getVelocity().size(); ++i) {
+      if (i != 0) ss << ",";
+      ss << traj_end_motion.getVelocity()[i];
+    }
+    ss << "]. \n";
+    ss << "Start Acceleration is [";
+    for (size_t i = 0; i < traj_end_motion.getAcceleration().size(); ++i) {
+      if (i != 0) ss << ",";
+      ss << traj_end_motion.getAcceleration()[i];
+    }
+    ss << "]. \n";
+    ss << "Start Jerk is [";
+    for (size_t i = 0; i < traj_end_motion.getJerk().size(); ++i) {
+      if (i != 0) ss << ",";
+      ss << traj_end_motion.getJerk()[i];
+    }
+    ss << "]. \n";
+    std::string s = ss.str();
+    throw TrajectoryException(s);
   }
   // Replace LTT
   new_long_term_trajectory_ = traj;
@@ -844,13 +914,13 @@ void SafetyShield::setLongTermTrajectory(LongTermTraj& traj) {
 
 bool SafetyShield::calculateLongTermTrajectory(const std::vector<double>& start_q, const std::vector<double> start_dq,
                                                const std::vector<double> start_ddq, const std::vector<double>& goal_q,
-                                               LongTermTraj& ltt) {
+                                               LongTermTraj& ltt, double new_time) {
   long_term_planner::Trajectory trajectory;
   bool success = ltp_.planTrajectory(goal_q, start_q, start_dq, start_ddq, trajectory);
   if (!success) return false;
   std::vector<Motion> new_traj(trajectory.length + 1);
-  double new_time = path_s_;
-  new_traj[0] = Motion(new_time, start_q, start_dq, start_ddq, 0.0);
+  int new_path_s_discrete = static_cast<int>(new_time / sample_time_);
+  new_traj[0] = Motion(new_time, start_q, start_dq, start_ddq, new_time);
   new_time += sample_time_;
   std::vector<double> q(nb_joints_);
   std::vector<double> dq(nb_joints_);
@@ -863,18 +933,18 @@ bool SafetyShield::calculateLongTermTrajectory(const std::vector<double>& start_
       ddq[j] = trajectory.a[j][i];
       dddq[j] = trajectory.j[j][i];
     }
-    new_traj[i + 1] = Motion(new_time, q, dq, ddq, dddq);
+    new_traj[i + 1] = Motion(new_time, q, dq, ddq, dddq, new_time);
     new_time += sample_time_;
   }
   if (shield_type_ == ShieldType::OFF || shield_type_ == ShieldType::SSM) {
     ltt = LongTermTraj(
-      new_traj, sample_time_, path_s_discrete_, 
+      new_traj, sample_time_, new_path_s_discrete,
       v_max_allowed_, a_max_allowed_, j_max_allowed_,
       sliding_window_k_, alpha_i_max_
     );
   } else {
     ltt = LongTermTraj(
-      new_traj, sample_time_, *robot_reach_, path_s_discrete_,
+      new_traj, sample_time_, *robot_reach_, new_path_s_discrete,
       v_max_allowed_, a_max_allowed_, j_max_allowed_, sliding_window_k_
     );
   }

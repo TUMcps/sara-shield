@@ -416,19 +416,6 @@ class SafetyShield {
   bool checkCurrentMotionForReplanning(Motion& current_motion);
 
   /**
-   * @brief Calculates a new trajectory from current joint state to desired goal state.
-   * @param start_q The current joint angles
-   * @param start_dq The current joint velocities
-   * @param start_ddq The current joint accelerations
-   * @param goal_q The desired joint angles
-   * @param ltt The calculated long-term trajectory
-   * @return True if success, false otherwise
-   */
-  bool calculateLongTermTrajectory(const std::vector<double>& start_q, const std::vector<double> start_dq,
-                                   const std::vector<double> start_ddq, const std::vector<double>& goal_q,
-                                   LongTermTraj& ltt);
-
-  /**
    * @brief Convert a capsule to a vector containing [p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, r]
    * p1: Center point of half sphere 1
    * p2: Center point of half sphere 2
@@ -556,6 +543,20 @@ class SafetyShield {
   Motion step(double cycle_begin_time);
 
   /**
+   * @brief Calculates a new trajectory from current joint state to desired goal state.
+   * @param start_q The current joint angles
+   * @param start_dq The current joint velocities
+   * @param start_ddq The current joint accelerations
+   * @param goal_q The desired joint angles
+   * @param ltt The calculated long-term trajectory
+   * @param new_time The time the trajectory starts at
+   * @return True if success, false otherwise
+   */
+  bool calculateLongTermTrajectory(const std::vector<double>& start_q, const std::vector<double> start_dq,
+                                   const std::vector<double> start_ddq, const std::vector<double>& goal_q,
+                                   LongTermTraj& ltt, double new_time=0);
+
+  /**
    * @brief Calculates and returns the current motion
    */
   Motion getCurrentMotion();
@@ -675,11 +676,12 @@ class SafetyShield {
    *    Requires the LTT to start with v=0
    *
    * @param traj New long-term trajectory
+   * @param force Force the new LTT to be set, even if the robot is not at a complete stop.
    *
    * @throws RobotMovementException Robot is not v=a=j=0
    * @throws TrajectoryException Incorrect LTT
    */
-  void setLongTermTrajectory(LongTermTraj& traj);
+  void setLongTermTrajectory(LongTermTraj& traj, bool force=false);
 
   /**
    * @brief Set the worst-case contact type on the end effector.

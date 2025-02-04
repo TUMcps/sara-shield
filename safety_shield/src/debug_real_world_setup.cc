@@ -142,7 +142,7 @@ int main() {
   std::vector<double> init_qpos = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   reach_lib::AABB table = reach_lib::AABB({-1.50, -0.88, init_z - 0.2}, {1.05, 1.0, init_z - 0.176});
   std::vector<reach_lib::AABB> environment_elements = {table};
-  safety_shield::ShieldType shield_type = safety_shield::ShieldType::PFL;
+  safety_shield::ShieldType shield_type = safety_shield::ShieldType::SSM;
 
   safety_shield::SafetyShield shield =
       safety_shield::SafetyShield(sample_time, trajectory_config_file, robot_config_file, mocap_config_file, init_x,
@@ -167,6 +167,7 @@ int main() {
     {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
   };
   std::vector<std::vector<double>> demo_trajectory = {
+    {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
     {0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
     {0.65, 1.15, -1.15, 0.0, -0.9, 0.0},
     {0.65,  6.05618294e-01, -7.85817200e-01,  4.31075533e-04, -1.74986551e+00, 0.0},
@@ -201,30 +202,37 @@ int main() {
   };
 
   // Define scenario
-  std::vector<std::vector<double>> desired_goals = demo_trajectory;
+  std::vector<std::vector<double>> goals = demo_trajectory;
+
+  // precompute long term trajectories
+  std::vector<safety_shield::LongTermTraj>* precomputed_llts = new std::vector<safety_shield::LongTermTraj>(goals.size() - 1);
+  shield.calculateLongTermTrajectory(goals[0], { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 }, goals[1], (*precomputed_llts)[0], 0.0);
+  for (int i = 1; i < (goals.size() - 1); i++) {
+    safety_shield::LongTermTraj previous_ltt = (*precomputed_llts)[i - 1];
+    safety_shield::Motion previous_ltt_motion = previous_ltt.getMotion(previous_ltt.getLength() - 1);
+    shield.calculateLongTermTrajectory(previous_ltt_motion.getAngle(), { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 }, goals[i + 1], (*precomputed_llts)[i], previous_ltt_motion.getTime() + sample_time);
+  }
+  int current_ltt_idx = 0;
+  shield.setLongTermTrajectory((*precomputed_llts)[current_ltt_idx]);
+
   // auto human_measurement = get_human_measurement_clamp_2();
   std::vector<std::vector<reach_lib::Point>> human_measurements;
   std::vector<double> time;
   // Recording is in 1000 Hz but sample time is 0.006 s
   int input_freq = 6;
-  get_meas_from_file("../data/out_ssm_jakob_mocap.csv", 6, time, human_measurements);
+  get_meas_from_file("../data/out_ssm_jakob_mocap.csv", input_freq, time, human_measurements);
 
   // n = shield_frequency / RL_frequency = 5 / 250 = 1 / 50
   spdlog::info("Debug started.");
-  int goal_number = 0;
-  std::vector<double> goal = desired_goals[goal_number];
-  shield.newLongTermTrajectory(goal, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
-  bool episode_finished = false;
-  bool use_close_measurement = false;
   double t = 0.0;
-  double start_time = 60.0;
-  double end_time = 360.0;
+  double start_time = 12.0;
+  double end_time = 100.0; //360
   int measurement_counter = 0;
   clock_t clkStart;
   clock_t clkFinish;
   std::ofstream myfile;
   myfile.open("../data/ssm_jakob_simulated.csv");
-  myfile << "time, is_safe, collision_type, calc_time, q_1, q_2, q_3, q_4, q_5, q_6, dq_1, dq_2, dq_3, dq_4, dq_5, dq_6, ddq_1, ddq_2, ddq_3, ddq_4, ddq_5, ddq_6" << std::endl;
+  myfile << "time, is_safe, collision_type, calc_time, q_1, q_2, q_3, q_4, q_5, q_6, dq_1, dq_2, dq_3, dq_4, dq_5, dq_6, ddq_1, ddq_2, ddq_3, ddq_4, ddq_5, ddq_6, human_pos_1_x, human_pos_1_y, human_pos_1_z" << std::endl;
   
   while(time[measurement_counter] < end_time) {
     if (time[measurement_counter] < start_time) {
@@ -250,24 +258,38 @@ int main() {
       myfile << next_motion.getVelocity()[i] << ", ";
     }
     for (int i = 0; i < 6; i++) {
-      if (i == 5) {
-        myfile << next_motion.getAcceleration()[i] << std::endl;
-        break;
-      }
       myfile << next_motion.getAcceleration()[i] << ", ";
     }
-    safety_shield::Motion* goal_motion = new safety_shield::Motion(0.0, desired_goals[goal_number]);
-    if (next_motion.hasSamePos(goal_motion, 0.03)) {
-      goal_number++;
-      if (goal_number == desired_goals.size()) {
-        episode_finished = true;
-        shield.reset(init_x, init_y, init_z, init_roll, init_pitch, init_yaw, init_qpos, t, environment_elements, shield_type);
-        goal_number = 0;
+    myfile << human_measurement[0].x << ", " << human_measurement[0].y << ", " << human_measurement[0].z << std::endl;
+
+    // Next trajectory switch
+    double motion_s = next_motion.getS();
+    safety_shield::LongTermTraj current_traj = (*precomputed_llts)[current_ltt_idx];
+    safety_shield::Motion last_motion_current_traj = current_traj.getMotion(current_traj.getLength() - 1);
+
+    int starting_index = (*precomputed_llts)[current_ltt_idx].getStartingIndex();
+    int current_ltt_length = (*precomputed_llts)[current_ltt_idx].getLength();
+    int end_index = starting_index + current_ltt_length - 1;
+    if (static_cast<int>(motion_s / sample_time) == (end_index + 1)) {
+      current_ltt_idx = (current_ltt_idx + 1) % (goals.size() - 1);
+      if (current_ltt_idx == 0) {
+        std::vector<double> init_qpos = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+        shield.reset(init_x, init_y, init_z, init_roll, init_pitch, init_yaw, init_qpos, 0.0, environment_elements, shield_type);
+        t = 0.0;
       }
-      std::vector<double> goal = desired_goals[goal_number];
-      shield.newLongTermTrajectory(goal, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+
+      if (!next_motion.isStopped(5e-3, 0.5, 401) || !next_motion.hasSamePos(&last_motion_current_traj, 1e-2)) {
+        std::stringstream ss;
+        ss << "next_motion.isStopped(5e-3, 0.5, 401) = ";
+        ss << next_motion.isStopped(5e-3, 0.5, 401);
+        ss << "\n";
+        ss << "next_motion.hasSamePos(&last_motion_current_traj, 1e-7)) = ";
+        ss << next_motion.hasSamePos(&last_motion_current_traj, 1e-7);
+        std::string s = ss.str();
+        throw safety_shield::TrajectoryException(s);
+      }
+      shield.setLongTermTrajectory((*precomputed_llts)[current_ltt_idx]);
     }
-    delete goal_motion;
   }
   myfile.close();
   spdlog::info("Debug finished.");

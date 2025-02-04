@@ -219,8 +219,9 @@ int main() {
   std::vector<std::vector<reach_lib::Point>> human_measurements;
   std::vector<double> time;
   // Recording is in 1000 Hz but sample time is 0.006 s
-  int input_freq = 6;
-  get_meas_from_file("../data/out_ssm_jakob_mocap.csv", input_freq, time, human_measurements);
+  int input_freq = 3;
+  std::string file_name = "out_sim_ssm_near_mocap";
+  get_meas_from_file("../data/" + file_name + ".csv", input_freq, time, human_measurements);
 
   // n = shield_frequency / RL_frequency = 5 / 250 = 1 / 50
   spdlog::info("Debug started.");
@@ -231,9 +232,31 @@ int main() {
   clock_t clkStart;
   clock_t clkFinish;
   std::ofstream myfile;
-  myfile.open("../data/ssm_jakob_simulated.csv");
-  myfile << "time, is_safe, collision_type, calc_time, q_1, q_2, q_3, q_4, q_5, q_6, dq_1, dq_2, dq_3, dq_4, dq_5, dq_6, ddq_1, ddq_2, ddq_3, ddq_4, ddq_5, ddq_6, human_pos_1_x, human_pos_1_y, human_pos_1_z" << std::endl;
-  
+  myfile.open("../data/" + file_name + "_simulated.csv");
+  myfile << "time, is_safe, collision_type, calc_time, ";
+  myfile << "q_1, q_2, q_3, q_4, q_5, q_6, ";
+  myfile << "dq_1, dq_2, dq_3, dq_4, dq_5, dq_6, ";
+  myfile << "ddq_1, ddq_2, ddq_3, ddq_4, ddq_5, ddq_6, ";
+  myfile << "human_pos_1_x, human_pos_1_y, human_pos_1_z, ";
+  int n_human_caps = 8;
+  for (int i = 0; i < n_human_caps; i++) {
+    myfile << "cap_h_" << i << "_x_1, cap_h_" << i << "_y_1, " << "cap_h_" << i << "_z_1, "; 
+    myfile << "cap_h_" << i << "_x_2, cap_h_" << i << "_y_2, " << "cap_h_" << i << "_z_2, ";
+    myfile << "cap_h_" << i << "_r, ";
+  }
+  int n_robot_caps = 6;
+  for (int i = 0; i < n_robot_caps; i++) {
+    myfile << "cap_r_" << i << "_x_1, cap_r_" << i << "_y_1, " << "cap_r_" << i << "_z_1, "; 
+    myfile << "cap_r_" << i << "_x_2, cap_r_" << i << "_y_2, " << "cap_r_" << i << "_z_2, ";
+    myfile << "cap_r_" << i << "_r, ";
+    if (i == n_robot_caps -1) {
+      myfile << "cap_r_" << i << "_r";
+      continue;
+    }
+    myfile << "cap_r_" << i << "_r, ";
+  }
+  myfile << std::endl;
+
   while(time[measurement_counter] < end_time) {
     if (time[measurement_counter] < start_time) {
       measurement_counter++;
@@ -241,8 +264,8 @@ int main() {
     }
     auto human_measurement = human_measurements[measurement_counter];
     measurement_counter++;
-    shield.humanMeasurement(human_measurement, t);
     t += sample_time;
+    shield.humanMeasurement(human_measurement, t);
     clkStart = clock();
     safety_shield::Motion next_motion = shield.step(t);
     clkFinish = clock();
@@ -260,8 +283,20 @@ int main() {
     for (int i = 0; i < 6; i++) {
       myfile << next_motion.getAcceleration()[i] << ", ";
     }
-    myfile << human_measurement[0].x << ", " << human_measurement[0].y << ", " << human_measurement[0].z << std::endl;
-
+    myfile << human_measurement[0].x << ", " << human_measurement[0].y << ", " << human_measurement[0].z << ",";
+    std::vector<std::vector<double>> human_capsules = shield.getHumanReachCapsules();
+    std::vector<std::vector<double>> robot_capsules = shield.getRobotReachCapsules();
+    for (int i = 0; i < n_human_caps; i++) {
+      myfile << human_capsules[i][0] << ", " << human_capsules[i][1] << ", " << human_capsules[i][2] << ", " << human_capsules[i][3] << ", " << human_capsules[i][4] << ", " << human_capsules[i][5] << ", " << human_capsules[i][6] << ", ";
+    }
+    for (int i = 0; i < n_robot_caps; i++) {
+      myfile << robot_capsules[i][0] << ", " << robot_capsules[i][1] << ", " << robot_capsules[i][2] << ", " << robot_capsules[i][3] << ", " << robot_capsules[i][4] << ", " << robot_capsules[i][5] << ", " << robot_capsules[i][6];
+      if (i == n_robot_caps -1) {
+        break;
+      }
+      myfile << ", ";
+    }
+    myfile << std::endl;
     // Next trajectory switch
     double motion_s = next_motion.getS();
     safety_shield::LongTermTraj current_traj = (*precomputed_llts)[current_ltt_idx];

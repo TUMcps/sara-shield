@@ -629,9 +629,9 @@ bool SafetyShield::verifySafety(Motion& current_motion, Motion& goal_motion, con
   int collision_index = -1;
   if (shield_type_ == ShieldType::PFL) {
     is_safe = verifyContactEnergySafetyByContactType(time_points, interval_edges_motions, collision_index);
-    if (!is_safe) {
-      spdlog::warn("Is safe = false at time {} with motion: q[0] = {}, dq[0] = {}.", current_motion.getTime(), current_motion.getAngle()[0], current_motion.getVelocity()[0]);
-    }
+    // if (!is_safe) {
+    //   spdlog::warn("Is safe = false at time {} with motion: q[0] = {}, dq[0] = {}.", current_motion.getTime(), current_motion.getAngle()[0], current_motion.getVelocity()[0]);
+    // }
     /*
     // is_safe = unconstrainedContactConstraint AND constrainedContactConstraint
     is_safe = verifyContactEnergySafety(time_points, interval_edges_motions, collision_index);

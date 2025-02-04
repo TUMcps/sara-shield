@@ -124,7 +124,7 @@ bodies:
         link: 0.49  # We assume blunt contacts for robot links
         blunt: 0.49  # From ISO/TS 15066:2016
         wedge: 2.0  # From Kirschner 2024: Towards Unconstrained Collision Injury Protection Data Sets: Initial Surrogate Experiments for the Human Hand
-        edge: 0.01  # From Kirschner 2024: Towards Unconstrained Collision Injury Protection Data Sets: Initial Surrogate Experiments for the Human Hand
+        edge: 0.375  # From Kirschner 2024: Towards Unconstrained Collision Injury Protection Data Sets: Initial Surrogate Experiments for the Human Hand
         sheet: 0.9  # From Kirschner 2024: Towards Unconstrained Collision Injury Protection Data Sets: Initial Surrogate Experiments for the Human Hand
       constrained:
         link: 0.0  # We don't want to allow clamping for robot links.

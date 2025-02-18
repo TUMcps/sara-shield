@@ -630,22 +630,11 @@ bool SafetyShield::verifySafety(Motion& current_motion, Motion& goal_motion, con
   int collision_index = -1;
   if (shield_type_ == ShieldType::PFL) {
     is_safe = verifyContactEnergySafetyByContactType(time_points, interval_edges_motions, collision_index);
-    // if (!is_safe) {
-    //   spdlog::warn("Is safe = false at time {} with motion: q[0] = {}, dq[0] = {}.", current_motion.getTime(), current_motion.getAngle()[0], current_motion.getVelocity()[0]);
-    // }
-    /*
-    // is_safe = unconstrainedContactConstraint AND constrainedContactConstraint
-    is_safe = verifyContactEnergySafety(time_points, interval_edges_motions, collision_index);
-    // Weird way of writing AND to make sure that the collision index is set to the correct value.
-    if (is_safe) {
-      is_safe = verifyConstrainedContactSafety(time_points, interval_edges_motions, collision_index);    
-    }
-    */
-    // Debugging
-    // if (!is_safe) {
-    //   spdlog::warn("Collision detected at time point {} with robot EEF velocity {}.", time_points[collision_index], robot_link_velocities[collision_index][nb_joints_ - 1]);
-    // }
-  } else {
+  } else if (shield_type_ == ShieldType::REDUCEDSPEED) {
+    is_safe = verifyReducedSpeed(time_points, interval_edges_motions, collision_index);
+  } else if (shield_type_ == ShieldType::SWITCH) {
+    is_safe = verifySwitchSpeed(time_points, interval_edges_motions, collision_index);
+  } else {  // SSM
     // Verify if the robot and human reachable sets are collision free
     is_safe = verify_->verifyHumanReachTimeIntervals(robot_capsules_time_intervals_, human_capsules_time_intervals_, collision_index);
   }
@@ -675,6 +664,35 @@ bool SafetyShield::verifyContactEnergySafety(std::vector<double> time_points, st
   return is_safe;
 }
 
+bool SafetyShield::verifyReducedSpeed(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index) {
+  collision_index = 0;
+  double dt = time_points[1] - time_points[0];
+  std::vector<double> velocity_errors = robot_reach_->calculateMaxVelErrors(dt, v_max_allowed_, a_max_allowed_, j_max_allowed_);
+  std::vector<std::vector<double>> robot_link_velocities = calculateMaxRobotLinkVelocitiesPerTimeInterval(
+    interval_edges_motions,
+    velocity_errors
+  );
+  return verify_->verifyReducedSpeed(robot_link_velocities, v_safe_, collision_index);
+}
+
+bool SafetyShield::verifySwitchSpeed(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index) {
+  collision_index = 0;
+  double dt = time_points[1] - time_points[0];
+  std::vector<double> velocity_errors = robot_reach_->calculateMaxVelErrors(dt, v_max_allowed_, a_max_allowed_, j_max_allowed_);
+  std::vector<std::vector<double>> robot_link_velocities = calculateMaxRobotLinkVelocitiesPerTimeInterval(
+    interval_edges_motions,
+    velocity_errors
+  );
+  return verify_->verifySwitchSpeed(
+    robot_capsules_time_intervals_,
+    human_capsules_time_intervals_,
+    robot_link_velocities,
+    v_safe_,
+    switch_distance_,
+    collision_index
+  );
+}
+
 bool SafetyShield::verifyContactVelocitySafety(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index) {
   double dt = time_points[1] - time_points[0];
   std::vector<double> velocity_errors = robot_reach_->calculateMaxVelErrors(dt, v_max_allowed_, a_max_allowed_, j_max_allowed_);
@@ -682,15 +700,12 @@ bool SafetyShield::verifyContactVelocitySafety(std::vector<double> time_points, 
     interval_edges_motions,
     velocity_errors
   );
-  std::vector<std::vector<double>> robot_link_reflected_masses = robot_reach_->calculateRobotLinkReflectedMassesPerTimeInterval(interval_edges_motions);
-  std::vector<std::vector<double>> maximal_contact_energies = human_reach_->getMaxContactEnergy();
-  bool is_safe = verify_->verifyHumanReachEnergyReflectedMasses(
-    robot_capsules_time_intervals_,
+  bool is_safe = verify_->verifyHumanReachVelocity(robot_capsules_time_intervals_,
     human_capsules_time_intervals_,
     robot_link_velocities,
-    robot_link_reflected_masses,
-    maximal_contact_energies,
-     collision_index);
+    maximal_contact_velocities_,
+    collision_index
+  );
   return is_safe;
 }
 
@@ -962,6 +977,19 @@ void SafetyShield::buildMaxContactEnergies() {
   // Then, add the EEF contact energies
   max_contact_energies_unconstrained_.push_back(human_reach_->getMaxContactEnergyFromType(false, eef_contact_type_));
   max_contact_energies_constrained_.push_back(human_reach_->getMaxContactEnergyFromType(true, eef_contact_type_));
+
+  if (shield_type_ == ShieldType::REDUCEDSPEED || shield_type_ == ShieldType::SWITCH) {
+    // Build maximal_contact_velocities_, Size = [n_human_models, n_human_bodies]
+    int n_human_models = human_reach_->getNumberOfHumanModels();
+    maximal_contact_velocities_ = std::vector<std::vector<double>>(n_human_models);
+    for (int i = 0; i < n_human_models; i++) {
+      int n_human_bodies = human_reach_->getNumberOfHumanBodies(i);
+      maximal_contact_velocities_[i] = std::vector<double>(n_human_bodies);
+      for (int j = 0; j < n_human_bodies; j++) {
+        maximal_contact_velocities_[i][j] = v_safe_;
+      }
+    }
+  }
 }
 
 std::vector<Motion> SafetyShield::getMotionsFromCurrentLTTandPath(const std::vector<double>& time_points) {

@@ -153,6 +153,40 @@ class Verify {
       CollisionType& collision_type) = 0;
 
   /**
+   * @brief Verify the reduced speed criterion of ISO 10218-1:2021
+   * 
+   * @param robot_link_velocities The maximal velocity of each robot link in each time interval. Size = [n_time_intervals, n_robot_links]
+   * @param v_safe The maximal allowed velocity
+   * @param collision_index Always returns 0.
+   * @return true If safe (robot slower than v_safe)
+   * @return false If unsafe
+   */
+  virtual bool verifyReducedSpeed(const std::vector<std::vector<double>> robot_link_velocities,
+    double v_safe,
+    int& collision_index) = 0;
+
+  /**
+   * @brief Verify the switch speed criterion of Svarny et al. 2019 Safe physical HRI: Toward a unified treatment of speed and separation monitoring together with power and force limiting
+   * 
+   * @param[in] robot_reachable_sets Reachable sets of the robot in each time interval. Size = [n_time_intervals, n_robot_links]
+   * @param[in] human_reachable_sets Reachable sets of the human in each time interval. Size = [n_time_intervals, n_human_models, n_human_bodies]
+   * @param robot_link_velocities The maximal velocity of each robot link in each time interval. Size = [n_time_intervals, n_robot_links]
+   * @param v_safe The maximal allowed velocity
+   * @param switch_distance The distance at which the robot should switch to reduced speed
+   * @param collision_index Always returns 0.
+   * @return true If safe (robot slower than v_safe)
+   * @return false If unsafe
+   */
+  virtual bool verifySwitchSpeed(
+    const std::vector<std::vector<reach_lib::Capsule>>& robot_reachable_sets,
+    const std::vector<std::vector<std::vector<reach_lib::Capsule>>>& human_reachable_sets,
+    const std::vector<std::vector<double>> robot_link_velocities,
+    double v_safe,
+    double switch_distance,
+    int& collision_index
+  ) = 0;
+
+  /**
    * @brief Verify the robot motion against the reachable occupancy of the human for each separate time interval
    *
    * @param[in] robot_reachable_sets Reachable sets of the robot in each time interval. Size = [n_time_intervals, n_robot_links]

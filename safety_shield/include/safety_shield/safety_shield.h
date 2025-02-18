@@ -52,8 +52,10 @@ namespace safety_shield {
  *  OFF: No shield is used.
  *  SSM: Speed and Separation Monitoring: The robot stops for the human.
  *  PFL: Power and Force Limiting: The robot slows down to a safe contact speed for the human.
+ *  REDUCEDSPEED: The allowed Cartesian velocity is set to a constant value, e.g. 0.25 m/s as defined in DIN EN ISO 10218-1:2021. (For ablation study)
+ *  SWITCH: If human is far away, use SSM, else use REDUCEDSPEED. Svarny et al. 2019 Safe physical HRI: Toward a unified treatment of speed and separation monitoring together with power and force limiting. (For ablation study)
  */
-enum class ShieldType { OFF, SSM, PFL };
+enum class ShieldType { OFF, SSM, PFL, REDUCEDSPEED, SWITCH };
 
 /**
  * @brief Computes the failsafe trajectory
@@ -307,6 +309,11 @@ class SafetyShield {
   std::vector<std::vector<std::vector<double>>> max_contact_energies_unconstrained_;
   std::vector<std::vector<std::vector<double>>> max_contact_energies_constrained_;
 
+  /**
+   * @brief The maximal contact velocity for each human body part. Only used if type = REDUCEDSPEED Size = [n_human_models, n_human_bodies]
+   */
+  std::vector<std::vector<double>> maximal_contact_velocities_;
+
   //////// For replanning new trajectory //////
   /**
    * @brief Trajecory planner
@@ -321,7 +328,13 @@ class SafetyShield {
   /**
    * @brief maximum cartesian velocity allowed at collision in m/s
    */
-  double v_safe_ = 0.10;
+  double v_safe_ = 0.25;
+
+  /**
+   * @brief The switching distance for the SWITCH shield type.
+   * Example value of Svarny et al. 2019
+   */
+  double switch_distance_ = 0.73;
 
   /**
    * @brief Defines the length of a time interval used for human and robot reachability analysis.
@@ -636,10 +649,29 @@ class SafetyShield {
     std::vector<std::vector<std::vector<RobotReach::CapsuleVelocity>>::const_iterator>& vel_cap_end);
 
   /**
-   * @brief verify if the contact velocity constraint is satisfied.
+   * @brief Verify the reduced speed criterion.
    * 
-   * @details This function is not fully implemented and therefore not tested!!!
-   * @details This function is not in use.
+   * @param time_points Time points that define the edges of the time intervals.
+   * @param interval_edges_motions Motions at the edges of the time intervals.
+   * @param collision_index Always returns 0.
+   * @return true if safe
+   * @return false if unsafe
+   */
+  bool verifyReducedSpeed(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index);
+
+  /**
+   * @brief Verify the switch speed criterion.
+   * 
+   * @param time_points Time points that define the edges of the time intervals.
+   * @param interval_edges_motions Motions at the edges of the time intervals.
+   * @param collision_index Always returns 0.
+   * @return true if safe
+   * @return false if unsafe
+   */
+  bool verifySwitchSpeed(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index);
+
+  /**
+   * @brief verify if the contact velocity constraint is satisfied.
    * 
    * @param[in] time_points Time points that define the edges of the time intervals.
    * @param[in] interval_edges_motions Motions at the edges of the time intervals.

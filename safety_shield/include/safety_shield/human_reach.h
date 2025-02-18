@@ -525,7 +525,6 @@ class HumanReach {
    */
   std::vector<std::vector<double>> getMaxContactEnergy() const;
 
-
   /**
    * @brief Get the maximal contact energy for each body part.
    * 
@@ -560,6 +559,14 @@ class HumanReach {
    */
   inline std::vector<std::unordered_map<int, std::set<int>>> getUnclampableMap() const {
     return unclampable_map_;
+  }
+
+  inline int getNumberOfHumanModels() const {
+    return human_models_.size();
+  }
+
+  inline int getNumberOfHumanBodies(int model) const {
+    return human_models_[model]->get_occupancy_p().size();
   }
 };
 

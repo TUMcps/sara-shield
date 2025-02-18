@@ -192,6 +192,46 @@ bool VerifyISO::verifyClamping(const std::vector<reach_lib::Capsule>& robot_caps
   }
 }
 
+bool VerifyISO::verifyReducedSpeed(const std::vector<std::vector<double>> robot_link_velocities,
+    double v_safe,
+    int& collision_index) {
+  collision_index = 0;
+  for (int i = 0; i < robot_link_velocities[i].size(); i++) {
+    // Check if robot in first time interval is faster than v_safe_
+    if (robot_link_velocities[0][i] > v_safe) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool VerifyISO::verifySwitchSpeed(
+    const std::vector<std::vector<reach_lib::Capsule>>& robot_reachable_sets,
+    const std::vector<std::vector<std::vector<reach_lib::Capsule>>>& human_reachable_sets,
+    const std::vector<std::vector<double>> robot_link_velocities,
+    double v_safe,
+    double switch_distance,
+    int& collision_index
+  ) {
+  collision_index = 0;
+  int n_time_intervals = robot_reachable_sets.size();
+  int n_robot_links = robot_reachable_sets[0].size();
+  int n_human_models = human_reachable_sets[0].size();
+  int n_human_bodies = human_reachable_sets[0][0].size();
+  for (int m = 0; m < n_human_models; m++) {
+    for (int j = 0; j < human_reachable_sets[0][m].size(); j++) {
+      for (int k = 0; k < n_robot_links; k++) {
+        double dist_1 = reach_lib::Point::norm(robot_reachable_sets[0][k].p2_, human_reachable_sets[0][m][j].p1_);
+        double dist_2 = reach_lib::Point::norm(robot_reachable_sets[0][k].p2_, human_reachable_sets[0][m][j].p2_);
+        if (dist_1 < switch_distance || dist_2 < switch_distance) {
+          return verifyReducedSpeed(robot_link_velocities, v_safe, collision_index);
+        }
+      }
+    }
+  }
+  return verifyHumanReachTimeIntervals(robot_reachable_sets, human_reachable_sets, collision_index);
+}
+
 bool VerifyISO::verifyHumanReachVelocity(const std::vector<std::vector<reach_lib::Capsule>>& robot_reachable_sets,
   const std::vector<std::vector<std::vector<reach_lib::Capsule>>>& human_reachable_sets,
   const std::vector<std::vector<double>>& robot_link_velocities,

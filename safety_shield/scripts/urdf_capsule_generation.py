@@ -493,7 +493,7 @@ def create_robot_file(limit_q_min, limit_q_max, limit_v, nb_joints, robot_name):
             f.write(f'q{i}: [0.0]\n')
         f.write('alpha_i_max: 5.0\n')
         f.write('# safety-rated speed specified by iso-norm\n')
-        f.write('v_safe: 0.05\n')
+        f.write('v_safe: 0.25\n')
         f.write('# APPROXIMATE == 0\n')
         f.write('# EXACT == 1\n')
         f.write('velocity_method: 0\n')

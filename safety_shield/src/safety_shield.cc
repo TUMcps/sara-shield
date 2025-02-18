@@ -634,6 +634,8 @@ bool SafetyShield::verifySafety(Motion& current_motion, Motion& goal_motion, con
     is_safe = verifyReducedSpeed(time_points, interval_edges_motions, collision_index);
   } else if (shield_type_ == ShieldType::SWITCH) {
     is_safe = verifySwitchSpeed(time_points, interval_edges_motions, collision_index);
+  } else if (shield_type_ == ShieldType::REFLECTEDMASS) {
+    is_safe = verifyReflectedMassVelocity(time_points, interval_edges_motions, collision_index);
   } else {  // SSM
     // Verify if the robot and human reachable sets are collision free
     is_safe = verify_->verifyHumanReachTimeIntervals(robot_capsules_time_intervals_, human_capsules_time_intervals_, collision_index);
@@ -691,6 +693,62 @@ bool SafetyShield::verifySwitchSpeed(std::vector<double> time_points, std::vecto
     switch_distance_,
     collision_index
   );
+}
+
+bool SafetyShield::verifyReflectedMassVelocity(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index) {
+  std::vector<std::vector<std::vector<RobotReach::CapsuleVelocity>>::const_iterator> vel_cap_start, vel_cap_end;
+  buildRobotVelocityPointers(interval_edges_motions, vel_cap_start, vel_cap_end);
+  std::vector<double> velocity_errors = robot_reach_->calculateMaxVelErrors(sample_time_, v_max_allowed_, a_max_allowed_, j_max_allowed_);
+  std::vector<std::vector<double>> human_radii = human_reach_->getAllHumanRadii();
+  std::vector<std::unordered_map<int, std::set<int>>> unclampable_body_part_maps = human_reach_->getUnclampableMap();
+  std::unordered_map<int, std::set<int>> unclampable_enclosures_map = robot_reach_->getUnclampableEnclosures();
+  std::vector<std::vector<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>>> inertias_beginning_of_intervals = 
+    getInertiaMatricesFromCurrentLTTandPath(std::vector<double>(time_points.begin(), time_points.end() - 1));
+  collision_index = 0;
+  int n_time_intervals = robot_capsules_time_intervals_.size();
+  int n_robot_links = robot_capsules_time_intervals_[0].size();
+  int n_human_models = human_capsules_time_intervals_[0].size();
+  
+  // Haddadin et al. only consider the last link of the robot (EEF)
+  int c = n_robot_links - 1;
+  for (int t = 0; t < n_time_intervals; t++) {
+    std::vector<RobotReach::CapsuleVelocity> robot_capsule_velocities = *(vel_cap_start[t]);
+    for (int m = 0; m < n_human_models; m++) {
+      int n_human_bodies = human_capsules_time_intervals_[t][m].size();
+      for (int b = 0; b < n_human_bodies; b++) {
+        // 1. Evaluate unit vector \boldsymbol{u} that is perpendicular to the object surface in the POI.
+        double dist_1 = reach_lib::Point::norm(robot_capsules_time_intervals_[t][c].p2_, human_capsules_time_intervals_[0][m][b].p1_);
+        double dist_2 = reach_lib::Point::norm(robot_capsules_time_intervals_[t][c].p2_, human_capsules_time_intervals_[0][m][b].p2_);
+        reach_lib::Point u_point;
+        if (dist_2 < dist_1) {
+          u_point = robot_capsules_time_intervals_[t][c].p2_ - human_capsules_time_intervals_[0][m][b].p2_;
+        } else {
+          u_point = robot_capsules_time_intervals_[t][c].p2_ - human_capsules_time_intervals_[0][m][b].p1_;
+        }
+        Eigen::Vector3d u(u_point.x, u_point.y, u_point.z);
+        // 2. Calculate v_POI from the desired EEF velocity (for simplicity, this is same as EEF velocity)
+        RobotReach::SE3Vel v_POI = robot_capsule_velocities[c].v2;
+        // 3. Calculate the inverse mass matrix of the EEF.
+        robot_reach_->calculateAllTransformationMatricesAndCapsules(interval_edges_motions[t].getAngle());
+        Eigen::Matrix<double, 3, 3> inv_mass_matrix = robot_reach_->calculateInvMassMatrixEEF();
+        Eigen::Matrix<double, 3, 3> mass_matrix = inv_mass_matrix.inverse();
+        // 4. Calculate the reflected mass of the EEF in the direction of \boldsymbol{u}.
+        double reflected_mass = robot_reach_->calculateReflectedMass(inv_mass_matrix, u);
+        // 5. Determine max allowed velocity.
+        // Usually, this would be read from an SMU, but to better compare with our method, we calculate it from the allowed energy.
+        // The maximal contact energy for each human body part. Size = [n_robot_links][n_human_models][n_human_bodies]
+        double max_allowed_energy = max_contact_energies_constrained_[c][m][b];
+        double max_allowed_velocity = sqrt(2 * max_allowed_energy / reflected_mass);
+        // 6. Check if the velocity is within the allowed range.
+        double v_POI_norm = v_POI.v.norm();
+        if (v_POI_norm > max_allowed_velocity) {
+          collision_index = t;
+          return false;
+        }
+      }
+    }
+  }
+  return true;
 }
 
 bool SafetyShield::verifyContactVelocitySafety(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index) {

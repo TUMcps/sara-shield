@@ -54,8 +54,9 @@ namespace safety_shield {
  *  PFL: Power and Force Limiting: The robot slows down to a safe contact speed for the human.
  *  REDUCEDSPEED: The allowed Cartesian velocity is set to a constant value, e.g. 0.25 m/s as defined in DIN EN ISO 10218-1:2021. (For ablation study)
  *  SWITCH: If human is far away, use SSM, else use REDUCEDSPEED. Svarny et al. 2019 Safe physical HRI: Toward a unified treatment of speed and separation monitoring together with power and force limiting. (For ablation study)
+ *  REFLECTEDMASS: Use the reflected mass safety evaluation of Haddadin et al. 2012. (For ablation study)
  */
-enum class ShieldType { OFF, SSM, PFL, REDUCEDSPEED, SWITCH };
+enum class ShieldType { OFF, SSM, PFL, REDUCEDSPEED, SWITCH, REFLECTEDMASS };
 
 /**
  * @brief Computes the failsafe trajectory
@@ -669,6 +670,17 @@ class SafetyShield {
    * @return false if unsafe
    */
   bool verifySwitchSpeed(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index);
+
+  /**
+   * @brief Verify safety based on the reflected mass from Haddadin et al. 2012.
+   * 
+   * @param time_points Time points that define the edges of the time intervals.
+   * @param interval_edges_motions Motions at the edges of the time intervals.
+   * @param collision_index Always returns 0.
+   * @return true if safe
+   * @return false if unsafe
+   */
+  bool verifyReflectedMassVelocity(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index);
 
   /**
    * @brief verify if the contact velocity constraint is satisfied.

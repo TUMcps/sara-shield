@@ -59,25 +59,58 @@ void get_meas_from_file(std::string file_path, int input_freq, std::vector<doubl
 }
 
 int main(int argc, char* argv[]) {
-  safety_shield::ShieldType shield_type = safety_shield::ShieldType::SSM;
+
+  std::string shield_type_str = "SSM";
+  safety_shield::ShieldType shield_type;
   if (argc >= 2) {
-    std::string shield_type_str = argv[1];
-    if (shield_type_str == "SSM") {
-      shield_type = safety_shield::ShieldType::SSM;
-    } else if (shield_type_str == "PFL") {
-      shield_type = safety_shield::ShieldType::PFL;
-    } else if (shield_type_str == "OFF") {
-      shield_type = safety_shield::ShieldType::OFF;
-    }
+    shield_type_str = argv[1];
   }
-  std::string mocap_config_file = std::string("../config/human_reach_TUM_lab.yaml");
+  if (shield_type_str == "SSM") {
+    shield_type = safety_shield::ShieldType::SSM;
+  } else if (shield_type_str == "PFL") {
+    shield_type = safety_shield::ShieldType::PFL;
+  } else if (shield_type_str == "REDUCEDSPEED") {
+    shield_type = safety_shield::ShieldType::REDUCEDSPEED;
+  } else if (shield_type_str == "SWITCH") {
+    shield_type = safety_shield::ShieldType::SWITCH;
+  } else if (shield_type_str == "REFLECTEDMASS") {
+    shield_type = safety_shield::ShieldType::REFLECTEDMASS;
+  } else if (shield_type_str == "OFF") {
+    shield_type = safety_shield::ShieldType::OFF;
+  } else {
+    throw std::invalid_argument("Invalid shield type.");
+  }
+
+  std::string contact_type_str = "EDGE";
   if (argc >= 3) {
-    mocap_config_file = std::string(argv[2]);
+    std::string contact_type_str = argv[2];
   }
-  std::string file_name = "ablation/vicon_p_1_puzzle_mocap";
+  safety_shield::ContactType contact_type;
+  if (contact_type_str == "BLUNT") {
+    contact_type = safety_shield::ContactType::BLUNT;
+  } else if (contact_type_str == "WEDGE") {
+    contact_type = safety_shield::ContactType::WEDGE;
+  } else if (contact_type_str == "EDGE") {
+    contact_type = safety_shield::ContactType::EDGE;
+  } else if (contact_type_str == "SHEET") {
+    contact_type = safety_shield::ContactType::SHEET;
+  } else {
+    throw std::invalid_argument("Invalid contact type.");
+  }
+
+  // Alternative: human_reach_ablation_no_contact_class
+  std::string mocap_file_option = "human_reach_TUM_lab";
   if (argc >= 4) {
-    file_name = std::string(argv[3]);
+    mocap_file_option = std::string(argv[3]);
   }
+  std::string mocap_config_file = "../config/" + mocap_file_option + ".yaml";
+
+  std::string file_name = "ablation/vicon_p_1_puzzle_mocap";
+  if (argc >= 5) {
+    file_name = std::string(argv[4]);
+  }
+
+  std::string output_file_name = file_name + "_" + shield_type_str + "_" + contact_type_str + "_" + mocap_file_option;
 
   double sample_time = 0.006;
   std::string trajectory_config_file = std::string("../config/trajectory_parameters_schunk.yaml");
@@ -94,7 +127,7 @@ int main(int argc, char* argv[]) {
 
   safety_shield::SafetyShield shield =
       safety_shield::SafetyShield(sample_time, trajectory_config_file, robot_config_file, mocap_config_file, init_x,
-                                  init_y, init_z, init_roll, init_pitch, init_yaw, init_qpos, environment_elements, shield_type);
+                                  init_y, init_z, init_roll, init_pitch, init_yaw, init_qpos, environment_elements, shield_type, contact_type);
 
   std::vector<std::vector<double>> demo_trajectory = {
     {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
@@ -164,7 +197,7 @@ int main(int argc, char* argv[]) {
   clock_t clkStart;
   clock_t clkFinish;
   std::ofstream myfile;
-  myfile.open("../data/" + file_name + "_simulated.csv");
+  myfile.open("../data/" + output_file_name + "_simulated.csv");
   myfile << "time, path_s, is_safe, collision_type, calc_time, ";
   myfile << "q_1, q_2, q_3, q_4, q_5, q_6, ";
   myfile << "dq_1, dq_2, dq_3, dq_4, dq_5, dq_6, ";

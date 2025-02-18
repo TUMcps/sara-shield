@@ -60,7 +60,7 @@ void get_meas_from_file(std::string file_path, int input_freq, std::vector<doubl
 
 int main(int argc, char* argv[]) {
 
-  std::string shield_type_str = "SSM";
+  std::string shield_type_str = "REFLECTEDMASS";
   safety_shield::ShieldType shield_type;
   if (argc >= 2) {
     shield_type_str = argv[1];

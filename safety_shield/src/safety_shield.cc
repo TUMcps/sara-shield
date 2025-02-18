@@ -730,7 +730,8 @@ bool SafetyShield::verifyReflectedMassVelocity(std::vector<double> time_points, 
   int n_time_intervals = robot_capsules_time_intervals_.size();
   int n_robot_links = robot_capsules_time_intervals_[0].size();
   int n_human_models = human_capsules_time_intervals_[0].size();
-  
+  // Hack to get scaled velocity.
+  Path path_copy = potential_path_;
   // Haddadin et al. only consider the last link of the robot (EEF)
   int c = n_robot_links - 1;
   for (int t = 0; t < n_time_intervals; t++) {
@@ -762,13 +763,18 @@ bool SafetyShield::verifyReflectedMassVelocity(std::vector<double> time_points, 
         double max_allowed_energy = max_contact_energies_constrained_[c][m][b];
         double max_allowed_velocity = sqrt(2 * max_allowed_energy / reflected_mass);
         // 6. Check if the velocity is within the allowed range.
-        double v_POI_norm = v_POI.v.norm();
+        double v_POI_norm = v_POI.v.dot(u);
+        // Scale by ds value
+        v_POI_norm *= path_copy.getVelocity();
         if (v_POI_norm > max_allowed_velocity) {
           collision_index = t;
           return false;
         }
       }
     }
+    // increment path and push motion to list
+    double time_interval_duration = time_points[t + 1] - time_points[t];
+    path_copy.increment(time_interval_duration);
   }
   return true;
 }

@@ -75,6 +75,8 @@ int main(int argc, char* argv[]) {
     shield_type = safety_shield::ShieldType::SWITCH;
   } else if (shield_type_str == "REFLECTEDMASS") {
     shield_type = safety_shield::ShieldType::REFLECTEDMASS;
+  } else if (shield_type_str == "ZONESSM") {
+    shield_type = safety_shield::ShieldType::ZONESSM;
   } else if (shield_type_str == "OFF") {
     shield_type = safety_shield::ShieldType::OFF;
   } else {

@@ -220,12 +220,10 @@ bool VerifyISO::verifySwitchSpeed(
   int n_human_bodies = human_reachable_sets[0][0].size();
   for (int m = 0; m < n_human_models; m++) {
     for (int j = 0; j < human_reachable_sets[0][m].size(); j++) {
-      for (int k = 0; k < n_robot_links; k++) {
-        double dist_1 = reach_lib::Point::norm(robot_reachable_sets[0][k].p2_, human_reachable_sets[0][m][j].p1_);
-        double dist_2 = reach_lib::Point::norm(robot_reachable_sets[0][k].p2_, human_reachable_sets[0][m][j].p2_);
-        if (dist_1 < switch_distance || dist_2 < switch_distance) {
-          return verifyReducedSpeed(robot_link_velocities, v_safe, collision_index);
-        }
+      double dist_1 = reach_lib::Point::norm(robot_reachable_sets[0][0].p1_, human_reachable_sets[0][m][j].p1_);
+      double dist_2 = reach_lib::Point::norm(robot_reachable_sets[0][0].p1_, human_reachable_sets[0][m][j].p2_);
+      if (dist_1 < switch_distance || dist_2 < switch_distance) {
+        return verifyReducedSpeed(robot_link_velocities, v_safe, collision_index);
       }
     }
   }

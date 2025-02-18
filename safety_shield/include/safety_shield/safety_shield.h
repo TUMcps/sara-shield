@@ -55,8 +55,9 @@ namespace safety_shield {
  *  REDUCEDSPEED: The allowed Cartesian velocity is set to a constant value, e.g. 0.25 m/s as defined in DIN EN ISO 10218-1:2021. (For ablation study)
  *  SWITCH: If human is far away, use SSM, else use REDUCEDSPEED. Svarny et al. 2019 Safe physical HRI: Toward a unified treatment of speed and separation monitoring together with power and force limiting. (For ablation study)
  *  REFLECTEDMASS: Use the reflected mass safety evaluation of Haddadin et al. 2012. (For ablation study)
+ *  ZONESSM: ISO 10218-1:2021 safety zone SSM approach. (For ablation study)
  */
-enum class ShieldType { OFF, SSM, PFL, REDUCEDSPEED, SWITCH, REFLECTEDMASS };
+enum class ShieldType { OFF, SSM, PFL, REDUCEDSPEED, SWITCH, REFLECTEDMASS, ZONESSM };
 
 /**
  * @brief Computes the failsafe trajectory
@@ -336,6 +337,12 @@ class SafetyShield {
    * Example value of Svarny et al. 2019
    */
   double switch_distance_ = 0.73;
+
+  /**
+   * @brief The size of the stopping zone for the ZONESSM shield type.
+   * Example value of Svarny et al. 2019
+   */
+  double zone_distance_ =  1.17;
 
   /**
    * @brief Defines the length of a time interval used for human and robot reachability analysis.
@@ -670,6 +677,17 @@ class SafetyShield {
    * @return false if unsafe
    */
   bool verifySwitchSpeed(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index);
+
+  /**
+   * @brief Verify the SSM zone criterion.
+   * 
+   * @param time_points Time points that define the edges of the time intervals.
+   * @param interval_edges_motions Motions at the edges of the time intervals.
+   * @param collision_index Always returns 0.
+   * @return true if safe
+   * @return false if unsafe
+   */
+  bool verifySSMZone(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index);
 
   /**
    * @brief Verify safety based on the reflected mass from Haddadin et al. 2012.

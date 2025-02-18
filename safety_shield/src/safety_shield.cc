@@ -636,6 +636,8 @@ bool SafetyShield::verifySafety(Motion& current_motion, Motion& goal_motion, con
     is_safe = verifySwitchSpeed(time_points, interval_edges_motions, collision_index);
   } else if (shield_type_ == ShieldType::REFLECTEDMASS) {
     is_safe = verifyReflectedMassVelocity(time_points, interval_edges_motions, collision_index);
+  } else if (shield_type_ == ShieldType::ZONESSM) {
+    is_safe = verifySSMZone(time_points, interval_edges_motions, collision_index);
   } else {  // SSM
     // Verify if the robot and human reachable sets are collision free
     is_safe = verify_->verifyHumanReachTimeIntervals(robot_capsules_time_intervals_, human_capsules_time_intervals_, collision_index);
@@ -693,6 +695,26 @@ bool SafetyShield::verifySwitchSpeed(std::vector<double> time_points, std::vecto
     switch_distance_,
     collision_index
   );
+}
+
+bool SafetyShield::verifySSMZone(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index) {
+  collision_index = 0;
+  int n_time_intervals = robot_capsules_time_intervals_.size();
+  int n_robot_links = robot_capsules_time_intervals_[0].size();
+  int n_human_models = human_capsules_time_intervals_[0].size();
+  for (int t=0; t < n_time_intervals; t++) {
+    for (int m = 0; m < n_human_models; m++) {
+      for (int j = 0; j < human_capsules_time_intervals_[t][m].size(); j++) {
+        // Distance to robot base
+        double dist_1 = reach_lib::Point::norm(robot_capsules_time_intervals_[t][0].p1_, human_capsules_time_intervals_[t][m][j].p1_);
+        double dist_2 = reach_lib::Point::norm(robot_capsules_time_intervals_[t][0].p1_, human_capsules_time_intervals_[t][m][j].p2_);
+        if (dist_1 < zone_distance_ || dist_2 < zone_distance_) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
 }
 
 bool SafetyShield::verifyReflectedMassVelocity(std::vector<double> time_points, std::vector<Motion> interval_edges_motions, int& collision_index) {

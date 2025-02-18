@@ -105,12 +105,12 @@ int main(int argc, char* argv[]) {
   }
   std::string mocap_config_file = "../config/" + mocap_file_option + ".yaml";
 
-  std::string file_name = "ablation/vicon_p_1_puzzle_mocap";
+  std::string file_str = "vicon_p_1_puzzle_mocap";
   if (argc >= 5) {
-    file_name = std::string(argv[4]);
+    file_str = std::string(argv[4]);
   }
-
-  std::string output_file_name = file_name + "_" + shield_type_str + "_" + contact_type_str + "_" + mocap_file_option;
+  std::string file_name = "ablation/" + file_str;
+  std::string output_file_name = "ablation_results/" + file_str + "_" + shield_type_str + "_" + contact_type_str + "_" + mocap_file_option;
 
   double sample_time = 0.006;
   std::string trajectory_config_file = std::string("../config/trajectory_parameters_schunk.yaml");
@@ -181,23 +181,23 @@ int main(int argc, char* argv[]) {
   // auto human_measurement = get_human_measurement_clamp_2();
   std::vector<std::vector<reach_lib::Point>> human_measurements;
   std::vector<double> time;
-  // Recording is in 1000 Hz but sample time is 0.006 s
-  int input_freq = 6;
+  // Set this to 6 if the recording is in 1000 Hz but sample time is 0.006 s
+  int input_freq = 1;
   // std::string file_name = "out_sim_ssm_near_mocap";
   get_meas_from_file("../data/" + file_name + ".csv", input_freq, time, human_measurements);
 
   // n = shield_frequency / RL_frequency = 5 / 250 = 1 / 50
   spdlog::info("Debug started.");
   double t = 0.0;
-  double start_time = 0.0;
-  double end_time = 180.0;
+  double start_time = 10.0;
+  double end_time = 190.0;
   int measurement_counter = 0;
   double path_s = 0.0;
   double last_s = 0.0;
   clock_t clkStart;
   clock_t clkFinish;
   std::ofstream myfile;
-  myfile.open("../data/" + output_file_name + "_simulated.csv");
+  myfile.open("../data/" + output_file_name + ".csv");
   myfile << "time, path_s, is_safe, collision_type, calc_time, ";
   myfile << "q_1, q_2, q_3, q_4, q_5, q_6, ";
   myfile << "dq_1, dq_2, dq_3, dq_4, dq_5, dq_6, ";
@@ -222,7 +222,7 @@ int main(int argc, char* argv[]) {
   }
   myfile << std::endl;
 
-  while(time[measurement_counter] < end_time) {
+  while(time[measurement_counter] < end_time && measurement_counter < human_measurements.size()-1) {
     if (time[measurement_counter] < start_time) {
       measurement_counter++;
       continue;
@@ -251,18 +251,32 @@ int main(int argc, char* argv[]) {
       myfile << next_motion.getAcceleration()[i] << ", ";
     }
     myfile << human_measurement[0].x << ", " << human_measurement[0].y << ", " << human_measurement[0].z << ",";
-    std::vector<std::vector<double>> human_capsules = shield.getHumanReachCapsules();
-    std::vector<std::vector<double>> robot_capsules = shield.getRobotReachCapsules();
-    for (int i = 0; i < n_human_caps; i++) {
-      myfile << human_capsules[i][0] << ", " << human_capsules[i][1] << ", " << human_capsules[i][2] << ", " << human_capsules[i][3] << ", " << human_capsules[i][4] << ", " << human_capsules[i][5] << ", " << human_capsules[i][6] << ", ";
-    }
-    for (int i = 0; i < n_robot_caps; i++) {
-      myfile << robot_capsules[i][0] << ", " << robot_capsules[i][1] << ", " << robot_capsules[i][2] << ", " << robot_capsules[i][3] << ", " << robot_capsules[i][4] << ", " << robot_capsules[i][5] << ", " << robot_capsules[i][6];
-      if (i == n_robot_caps -1) {
-        break;
+    if (shield_type != safety_shield::ShieldType::OFF) {
+      std::vector<std::vector<double>> human_capsules = shield.getHumanReachCapsules();
+      for (int i = 0; i < n_human_caps; i++) {
+        myfile << human_capsules[i][0] << ", " << human_capsules[i][1] << ", " << human_capsules[i][2] << ", " << human_capsules[i][3] << ", " << human_capsules[i][4] << ", " << human_capsules[i][5] << ", " << human_capsules[i][6] << ", ";
       }
-      myfile << ", ";
+      std::vector<std::vector<double>> robot_capsules = shield.getRobotReachCapsules();
+      for (int i = 0; i < n_robot_caps; i++) {
+        myfile << robot_capsules[i][0] << ", " << robot_capsules[i][1] << ", " << robot_capsules[i][2] << ", " << robot_capsules[i][3] << ", " << robot_capsules[i][4] << ", " << robot_capsules[i][5] << ", " << robot_capsules[i][6];
+        if (i == n_robot_caps -1) {
+          break;
+        }
+        myfile << ", ";
+      }
+    } else {
+      for (int i = 0; i < n_human_caps; i++) {
+        myfile << "0, 0, 0, 0, 0, 0, 0, ";
+      }
+      for (int i = 0; i < n_robot_caps; i++) {
+        myfile << "0, 0, 0, 0, 0, 0, 0";
+        if (i == n_robot_caps -1) {
+          break;
+        }
+        myfile << ", ";
+      }
     }
+    
     myfile << std::endl;
     // Next trajectory switch
     double motion_s = next_motion.getS();

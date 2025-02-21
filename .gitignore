@@ -43,3 +43,7 @@ __pycache__/
 cmake-build-debug/
 cmake-build-debug-coverage/
 cmake-build-release/
+
+safety_shield/data/ablation/
+safety_shield/data/ablation_results/vicon_*.csv
+

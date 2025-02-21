@@ -1,0 +1,511 @@
+method,user,task,mode,eef,config,path_s
+PFL,3,screwing,PFL,SHEET,humanreachTUMlab,160.97
+PFL,4,stacking,PFL,WEDGE,humanreachTUMlab,176.375
+PFL No Contact Classification,5,puzzle,PFL,BLUNT,humanreachablationnocontactclass,140.583
+PFL No Contact Classification,1,robco,PFL,WEDGE,humanreachablationnocontactclass,152.887
+Reduced Speed Zone,1,tower,SWITCH,EDGE,humanreachTUMlab,116.75
+Reflected Mass,3,puzzle,REFLECTEDMASS,BLUNT,humanreachTUMlab,141.48
+SSM,5,tower,SSM,EDGE,humanreachTUMlab,126.354
+SSM,1,screwing,SSM,EDGE,humanreachTUMlab,122.486
+PFL No Contact Classification,4,puzzle,PFL,EDGE,humanreachablationnocontactclass,142.428
+PFL,2,stacking,PFL,BLUNT,humanreachTUMlab,177.791
+PFL,3,stacking,PFL,EDGE,humanreachTUMlab,176.83
+Reflected Mass,6,robco,REFLECTEDMASS,BLUNT,humanreachTUMlab,147.346
+PFL No Contact Classification,6,robco,PFL,EDGE,humanreachablationnocontactclass,127.48
+Reflected Mass,6,tower,REFLECTEDMASS,SHEET,humanreachTUMlab,149.957
+PFL,2,stacking,PFL,WEDGE,humanreachTUMlab,177.777
+OFF,5,tower,OFF,EDGE,humanreachTUMlab,179.844
+Reflected Mass,2,stacking,REFLECTEDMASS,SHEET,humanreachTUMlab,158.963
+PFL,5,tower,PFL,SHEET,humanreachTUMlab,175.178
+PFL No Contact Classification,5,robco,PFL,BLUNT,humanreachablationnocontactclass,121.891
+OFF,4,stacking,OFF,EDGE,humanreachTUMlab,179.844
+Reduced Speed Zone,1,robco,SWITCH,EDGE,humanreachTUMlab,122.368
+OFF,3,tower,OFF,EDGE,humanreachTUMlab,179.844
+Reflected Mass,3,robco,REFLECTEDMASS,EDGE,humanreachTUMlab,131.859
+Reduced Speed Zone,2,stacking,SWITCH,EDGE,humanreachTUMlab,152.605
+PFL No Contact Classification,1,puzzle,PFL,BLUNT,humanreachablationnocontactclass,166.137
+Reflected Mass,3,robco,REFLECTEDMASS,WEDGE,humanreachTUMlab,139.675
+Reflected Mass,2,robco,REFLECTEDMASS,EDGE,humanreachTUMlab,145.993
+PFL No Contact Classification,3,tower,PFL,WEDGE,humanreachablationnocontactclass,146.517
+PFL No Contact Classification,2,puzzle,PFL,WEDGE,humanreachablationnocontactclass,155.321
+SSM Zone,1,puzzle,ZONESSM,EDGE,humanreachTUMlab,0.0
+Reduced Speed Zone,1,stacking,SWITCH,EDGE,humanreachTUMlab,152.605
+PFL,4,screwing,PFL,WEDGE,humanreachTUMlab,153.917
+PFL No Contact Classification,3,robco,PFL,WEDGE,humanreachablationnocontactclass,132.976
+Reflected Mass,4,stacking,REFLECTEDMASS,SHEET,humanreachTUMlab,153.954
+SSM Zone,1,stacking,ZONESSM,EDGE,humanreachTUMlab,44.0923
+Reflected Mass,5,robco,REFLECTEDMASS,EDGE,humanreachTUMlab,129.55
+PFL No Contact Classification,2,screwing,PFL,BLUNT,humanreachablationnocontactclass,159.265
+Reflected Mass,1,tower,REFLECTEDMASS,EDGE,humanreachTUMlab,143.205
+Reflected Mass,6,stacking,REFLECTEDMASS,EDGE,humanreachTUMlab,153.868
+Reflected Mass,4,stacking,REFLECTEDMASS,WEDGE,humanreachTUMlab,153.573
+PFL,6,screwing,PFL,WEDGE,humanreachTUMlab,164.848
+SSM Zone,6,tower,ZONESSM,EDGE,humanreachTUMlab,0.0
+PFL No Contact Classification,2,puzzle,PFL,BLUNT,humanreachablationnocontactclass,155.473
+PFL,3,puzzle,PFL,WEDGE,humanreachTUMlab,158.275
+PFL No Contact Classification,1,tower,PFL,SHEET,humanreachablationnocontactclass,152.52
+PFL No Contact Classification,3,stacking,PFL,EDGE,humanreachablationnocontactclass,163.326
+PFL,4,screwing,PFL,BLUNT,humanreachTUMlab,153.913
+SSM Zone,3,screwing,ZONESSM,EDGE,humanreachTUMlab,0.66039
+PFL No Contact Classification,6,robco,PFL,WEDGE,humanreachablationnocontactclass,135.071
+OFF,3,robco,OFF,EDGE,humanreachTUMlab,179.844
+Reflected Mass,2,tower,REFLECTEDMASS,BLUNT,humanreachTUMlab,154.443
+PFL No Contact Classification,6,screwing,PFL,EDGE,humanreachablationnocontactclass,143.437
+Reduced Speed Zone,4,tower,SWITCH,EDGE,humanreachTUMlab,106.009
+Reflected Mass,3,stacking,REFLECTEDMASS,WEDGE,humanreachTUMlab,152.527
+PFL No Contact Classification,4,screwing,PFL,SHEET,humanreachablationnocontactclass,135.288
+PFL,2,screwing,PFL,SHEET,humanreachTUMlab,173.688
+Reflected Mass,5,stacking,REFLECTEDMASS,EDGE,humanreachTUMlab,150.214
+Reduced Speed,2,puzzle,REDUCEDSPEED,EDGE,humanreachTUMlab,68.9451
+PFL,5,tower,PFL,WEDGE,humanreachTUMlab,175.178
+Reflected Mass,5,screwing,REFLECTEDMASS,SHEET,humanreachTUMlab,147.415
+PFL No Contact Classification,5,tower,PFL,WEDGE,humanreachablationnocontactclass,156.426
+PFL No Contact Classification,5,stacking,PFL,EDGE,humanreachablationnocontactclass,167.056
+PFL,3,robco,PFL,WEDGE,humanreachTUMlab,159.448
+Reduced Speed Zone,4,screwing,SWITCH,EDGE,humanreachTUMlab,99.1041
+Reduced Speed,5,stacking,REDUCEDSPEED,EDGE,humanreachTUMlab,71.9286
+PFL,2,tower,PFL,BLUNT,humanreachTUMlab,177.774
+PFL,3,stacking,PFL,SHEET,humanreachTUMlab,177.104
+SSM Zone,2,screwing,ZONESSM,EDGE,humanreachTUMlab,0.0
+OFF,4,screwing,OFF,EDGE,humanreachTUMlab,179.844
+SSM,3,robco,SSM,EDGE,humanreachTUMlab,70.8245
+Reflected Mass,5,tower,REFLECTEDMASS,BLUNT,humanreachTUMlab,150.064
+PFL,2,stacking,PFL,SHEET,humanreachTUMlab,177.778
+PFL,6,screwing,PFL,SHEET,humanreachTUMlab,164.838
+Reflected Mass,6,tower,REFLECTEDMASS,EDGE,humanreachTUMlab,133.776
+SSM Zone,3,robco,ZONESSM,EDGE,humanreachTUMlab,3.90601
+PFL No Contact Classification,6,tower,PFL,SHEET,humanreachablationnocontactclass,141.445
+SSM,4,tower,SSM,EDGE,humanreachTUMlab,92.2526
+PFL No Contact Classification,2,screwing,PFL,WEDGE,humanreachablationnocontactclass,156.208
+PFL No Contact Classification,4,tower,PFL,EDGE,humanreachablationnocontactclass,136.609
+Reflected Mass,4,puzzle,REFLECTEDMASS,WEDGE,humanreachTUMlab,137.307
+Reflected Mass,6,screwing,REFLECTEDMASS,EDGE,humanreachTUMlab,135.357
+Reduced Speed,4,stacking,REDUCEDSPEED,EDGE,humanreachTUMlab,65.132
+PFL,1,puzzle,PFL,BLUNT,humanreachTUMlab,174.685
+PFL,3,puzzle,PFL,BLUNT,humanreachTUMlab,158.275
+SSM Zone,5,stacking,ZONESSM,EDGE,humanreachTUMlab,50.4155
+Reflected Mass,4,tower,REFLECTEDMASS,SHEET,humanreachTUMlab,145.505
+Reduced Speed,6,screwing,REDUCEDSPEED,EDGE,humanreachTUMlab,78.6688
+PFL No Contact Classification,5,stacking,PFL,WEDGE,humanreachablationnocontactclass,167.069
+PFL,1,robco,PFL,BLUNT,humanreachTUMlab,168.738
+PFL,3,puzzle,PFL,SHEET,humanreachTUMlab,158.275
+PFL No Contact Classification,3,tower,PFL,SHEET,humanreachablationnocontactclass,151.132
+PFL,2,tower,PFL,WEDGE,humanreachTUMlab,177.791
+PFL,5,screwing,PFL,EDGE,humanreachTUMlab,158.0
+Reflected Mass,2,screwing,REFLECTEDMASS,EDGE,humanreachTUMlab,141.444
+SSM,4,stacking,SSM,EDGE,humanreachTUMlab,145.464
+Reflected Mass,4,screwing,REFLECTEDMASS,BLUNT,humanreachTUMlab,142.276
+Reflected Mass,5,robco,REFLECTEDMASS,BLUNT,humanreachTUMlab,144.027
+Reduced Speed,3,stacking,REDUCEDSPEED,EDGE,humanreachTUMlab,47.8476
+PFL No Contact Classification,4,robco,PFL,EDGE,humanreachablationnocontactclass,113.177
+PFL,5,screwing,PFL,BLUNT,humanreachTUMlab,158.005
+PFL,5,screwing,PFL,WEDGE,humanreachTUMlab,158.001
+Reduced Speed,6,tower,REDUCEDSPEED,EDGE,humanreachTUMlab,47.8354
+Reflected Mass,4,stacking,REFLECTEDMASS,BLUNT,humanreachTUMlab,154.111
+PFL No Contact Classification,4,screwing,PFL,EDGE,humanreachablationnocontactclass,130.686
+PFL No Contact Classification,6,robco,PFL,SHEET,humanreachablationnocontactclass,135.013
+PFL,4,robco,PFL,SHEET,humanreachTUMlab,138.476
+Reflected Mass,2,puzzle,REFLECTEDMASS,BLUNT,humanreachTUMlab,148.444
+PFL No Contact Classification,2,robco,PFL,EDGE,humanreachablationnocontactclass,140.042
+PFL,2,robco,PFL,SHEET,humanreachTUMlab,166.556
+PFL No Contact Classification,4,puzzle,PFL,WEDGE,humanreachablationnocontactclass,143.423
+SSM Zone,5,robco,ZONESSM,EDGE,humanreachTUMlab,9.32949
+SSM Zone,2,puzzle,ZONESSM,EDGE,humanreachTUMlab,0.0
+Reflected Mass,3,tower,REFLECTEDMASS,WEDGE,humanreachTUMlab,142.862
+Reflected Mass,5,puzzle,REFLECTEDMASS,BLUNT,humanreachTUMlab,143.177
+PFL,1,screwing,PFL,WEDGE,humanreachTUMlab,167.456
+PFL No Contact Classification,4,tower,PFL,SHEET,humanreachablationnocontactclass,139.575
+Reduced Speed,5,robco,REDUCEDSPEED,EDGE,humanreachTUMlab,78.6672
+PFL,5,screwing,PFL,SHEET,humanreachTUMlab,158.005
+Reflected Mass,4,screwing,REFLECTEDMASS,SHEET,humanreachTUMlab,142.242
+SSM Zone,2,stacking,ZONESSM,EDGE,humanreachTUMlab,44.0923
+Reflected Mass,5,stacking,REFLECTEDMASS,WEDGE,humanreachTUMlab,156.163
+Reflected Mass,6,puzzle,REFLECTEDMASS,BLUNT,humanreachTUMlab,146.539
+SSM,1,tower,SSM,EDGE,humanreachTUMlab,116.307
+Reflected Mass,3,screwing,REFLECTEDMASS,WEDGE,humanreachTUMlab,136.505
+PFL No Contact Classification,3,puzzle,PFL,BLUNT,humanreachablationnocontactclass,146.475
+PFL No Contact Classification,6,screwing,PFL,WEDGE,humanreachablationnocontactclass,146.087
+PFL No Contact Classification,3,robco,PFL,BLUNT,humanreachablationnocontactclass,141.111
+Reflected Mass,6,puzzle,REFLECTEDMASS,WEDGE,humanreachTUMlab,143.124
+PFL No Contact Classification,4,robco,PFL,SHEET,humanreachablationnocontactclass,119.7
+SSM,5,robco,SSM,EDGE,humanreachTUMlab,28.0728
+Reduced Speed,5,puzzle,REDUCEDSPEED,EDGE,humanreachTUMlab,50.7389
+PFL No Contact Classification,4,robco,PFL,WEDGE,humanreachablationnocontactclass,119.219
+PFL No Contact Classification,5,puzzle,PFL,WEDGE,humanreachablationnocontactclass,140.594
+Reflected Mass,1,puzzle,REFLECTEDMASS,WEDGE,humanreachTUMlab,151.528
+PFL,4,screwing,PFL,SHEET,humanreachTUMlab,153.913
+PFL No Contact Classification,5,robco,PFL,WEDGE,humanreachablationnocontactclass,115.358
+PFL,5,robco,PFL,SHEET,humanreachTUMlab,140.12
+PFL,2,stacking,PFL,EDGE,humanreachTUMlab,177.614
+Reduced Speed,4,robco,REDUCEDSPEED,EDGE,humanreachTUMlab,84.9778
+Reflected Mass,2,tower,REFLECTEDMASS,SHEET,humanreachTUMlab,154.435
+Reduced Speed,4,puzzle,REDUCEDSPEED,EDGE,humanreachTUMlab,88.038
+Reflected Mass,1,screwing,REFLECTEDMASS,WEDGE,humanreachTUMlab,146.423
+Reflected Mass,5,robco,REFLECTEDMASS,WEDGE,humanreachTUMlab,138.571
+PFL,3,tower,PFL,WEDGE,humanreachTUMlab,174.923
+PFL,1,tower,PFL,BLUNT,humanreachTUMlab,175.325
+Reflected Mass,1,screwing,REFLECTEDMASS,SHEET,humanreachTUMlab,154.496
+PFL,6,robco,PFL,BLUNT,humanreachTUMlab,151.25
+Reflected Mass,1,stacking,REFLECTEDMASS,WEDGE,humanreachTUMlab,155.386
+PFL No Contact Classification,4,stacking,PFL,EDGE,humanreachablationnocontactclass,162.094
+Reflected Mass,2,robco,REFLECTEDMASS,WEDGE,humanreachTUMlab,151.833
+Reflected Mass,2,tower,REFLECTEDMASS,WEDGE,humanreachTUMlab,150.574
+OFF,2,stacking,OFF,EDGE,humanreachTUMlab,179.844
+Reduced Speed,6,puzzle,REDUCEDSPEED,EDGE,humanreachTUMlab,89.4129
+PFL No Contact Classification,5,puzzle,PFL,EDGE,humanreachablationnocontactclass,140.585
+PFL,1,screwing,PFL,SHEET,humanreachTUMlab,167.537
+SSM,2,puzzle,SSM,EDGE,humanreachTUMlab,131.841
+SSM,6,tower,SSM,EDGE,humanreachTUMlab,102.645
+Reflected Mass,1,stacking,REFLECTEDMASS,SHEET,humanreachTUMlab,158.963
+PFL No Contact Classification,6,screwing,PFL,SHEET,humanreachablationnocontactclass,149.384
+OFF,1,puzzle,OFF,EDGE,humanreachTUMlab,179.844
+Reflected Mass,2,screwing,REFLECTEDMASS,SHEET,humanreachTUMlab,151.113
+SSM,3,puzzle,SSM,EDGE,humanreachTUMlab,82.738
+Reflected Mass,3,screwing,REFLECTEDMASS,SHEET,humanreachTUMlab,140.86
+PFL,4,puzzle,PFL,BLUNT,humanreachTUMlab,154.956
+PFL No Contact Classification,1,puzzle,PFL,WEDGE,humanreachablationnocontactclass,166.07
+PFL,1,tower,PFL,SHEET,humanreachTUMlab,175.339
+PFL,1,puzzle,PFL,SHEET,humanreachTUMlab,174.685
+PFL No Contact Classification,2,tower,PFL,SHEET,humanreachablationnocontactclass,162.439
+Reflected Mass,1,tower,REFLECTEDMASS,WEDGE,humanreachTUMlab,147.032
+PFL No Contact Classification,6,tower,PFL,EDGE,humanreachablationnocontactclass,132.071
+Reduced Speed Zone,2,screwing,SWITCH,EDGE,humanreachTUMlab,125.62
+PFL,5,robco,PFL,WEDGE,humanreachTUMlab,140.12
+SSM Zone,3,stacking,ZONESSM,EDGE,humanreachTUMlab,35.8079
+Reflected Mass,2,stacking,REFLECTEDMASS,EDGE,humanreachTUMlab,150.375
+PFL,6,tower,PFL,BLUNT,humanreachTUMlab,172.369
+OFF,4,puzzle,OFF,EDGE,humanreachTUMlab,179.844
+SSM,3,stacking,SSM,EDGE,humanreachTUMlab,152.239
+Reflected Mass,3,puzzle,REFLECTEDMASS,EDGE,humanreachTUMlab,127.633
+PFL No Contact Classification,3,puzzle,PFL,SHEET,humanreachablationnocontactclass,144.897
+Reflected Mass,2,robco,REFLECTEDMASS,SHEET,humanreachTUMlab,154.868
+PFL No Contact Classification,6,stacking,PFL,WEDGE,humanreachablationnocontactclass,165.701
+PFL No Contact Classification,1,robco,PFL,EDGE,humanreachablationnocontactclass,149.848
+PFL,1,stacking,PFL,SHEET,humanreachTUMlab,177.778
+PFL No Contact Classification,5,stacking,PFL,SHEET,humanreachablationnocontactclass,168.168
+Reflected Mass,3,tower,REFLECTEDMASS,BLUNT,humanreachTUMlab,148.583
+SSM Zone,5,puzzle,ZONESSM,EDGE,humanreachTUMlab,0.0
+PFL No Contact Classification,1,stacking,PFL,BLUNT,humanreachablationnocontactclass,171.369
+OFF,2,tower,OFF,EDGE,humanreachTUMlab,179.844
+Reflected Mass,5,stacking,REFLECTEDMASS,SHEET,humanreachTUMlab,159.623
+PFL,6,screwing,PFL,EDGE,humanreachTUMlab,164.64
+PFL,2,puzzle,PFL,BLUNT,humanreachTUMlab,173.665
+Reflected Mass,1,puzzle,REFLECTEDMASS,SHEET,humanreachTUMlab,151.587
+PFL,1,stacking,PFL,EDGE,humanreachTUMlab,177.614
+Reduced Speed Zone,3,stacking,SWITCH,EDGE,humanreachTUMlab,151.713
+Reflected Mass,3,robco,REFLECTEDMASS,BLUNT,humanreachTUMlab,143.422
+Reflected Mass,3,screwing,REFLECTEDMASS,BLUNT,humanreachTUMlab,140.863
+PFL,6,screwing,PFL,BLUNT,humanreachTUMlab,164.847
+PFL,6,tower,PFL,EDGE,humanreachTUMlab,171.443
+PFL,3,stacking,PFL,BLUNT,humanreachTUMlab,177.085
+PFL No Contact Classification,3,screwing,PFL,SHEET,humanreachablationnocontactclass,139.298
+Reflected Mass,3,stacking,REFLECTEDMASS,EDGE,humanreachTUMlab,146.133
+SSM Zone,3,puzzle,ZONESSM,EDGE,humanreachTUMlab,0.0
+PFL No Contact Classification,2,puzzle,PFL,SHEET,humanreachablationnocontactclass,155.362
+PFL,4,tower,PFL,WEDGE,humanreachTUMlab,173.217
+PFL No Contact Classification,5,screwing,PFL,EDGE,humanreachablationnocontactclass,142.764
+PFL No Contact Classification,3,screwing,PFL,BLUNT,humanreachablationnocontactclass,139.405
+Reduced Speed,2,tower,REDUCEDSPEED,EDGE,humanreachTUMlab,47.9559
+PFL No Contact Classification,6,stacking,PFL,EDGE,humanreachablationnocontactclass,164.522
+Reduced Speed Zone,6,puzzle,SWITCH,EDGE,humanreachTUMlab,108.222
+PFL No Contact Classification,2,stacking,PFL,EDGE,humanreachablationnocontactclass,165.245
+PFL,3,tower,PFL,EDGE,humanreachTUMlab,173.245
+Reduced Speed,6,robco,REDUCEDSPEED,EDGE,humanreachTUMlab,89.3699
+PFL No Contact Classification,1,screwing,PFL,BLUNT,humanreachablationnocontactclass,148.115
+Reflected Mass,6,puzzle,REFLECTEDMASS,EDGE,humanreachTUMlab,133.528
+OFF,1,tower,OFF,EDGE,humanreachTUMlab,179.844
+PFL No Contact Classification,6,puzzle,PFL,WEDGE,humanreachablationnocontactclass,147.971
+PFL,5,puzzle,PFL,WEDGE,humanreachTUMlab,152.597
+Reduced Speed Zone,5,tower,SWITCH,EDGE,humanreachTUMlab,126.198
+Reflected Mass,3,stacking,REFLECTEDMASS,SHEET,humanreachTUMlab,154.008
+OFF,3,stacking,OFF,EDGE,humanreachTUMlab,179.844
+PFL,3,robco,PFL,EDGE,humanreachTUMlab,159.405
+OFF,2,puzzle,OFF,EDGE,humanreachTUMlab,179.844
+PFL,6,puzzle,PFL,EDGE,humanreachTUMlab,162.425
+PFL,3,screwing,PFL,WEDGE,humanreachTUMlab,160.713
+PFL No Contact Classification,6,stacking,PFL,BLUNT,humanreachablationnocontactclass,168.52
+OFF,2,robco,OFF,EDGE,humanreachTUMlab,179.844
+PFL,6,puzzle,PFL,WEDGE,humanreachTUMlab,163.185
+Reduced Speed,2,screwing,REDUCEDSPEED,EDGE,humanreachTUMlab,47.9992
+PFL,6,stacking,PFL,BLUNT,humanreachTUMlab,177.649
+OFF,5,stacking,OFF,EDGE,humanreachTUMlab,179.844
+PFL No Contact Classification,4,stacking,PFL,BLUNT,humanreachablationnocontactclass,162.406
+PFL No Contact Classification,6,puzzle,PFL,SHEET,humanreachablationnocontactclass,147.976
+PFL,6,tower,PFL,SHEET,humanreachTUMlab,172.365
+OFF,1,stacking,OFF,EDGE,humanreachTUMlab,179.844
+PFL,1,puzzle,PFL,WEDGE,humanreachTUMlab,174.683
+Reduced Speed Zone,5,screwing,SWITCH,EDGE,humanreachTUMlab,97.8515
+PFL,2,robco,PFL,WEDGE,humanreachTUMlab,166.556
+Reflected Mass,2,screwing,REFLECTEDMASS,WEDGE,humanreachTUMlab,149.179
+SSM Zone,2,tower,ZONESSM,EDGE,humanreachTUMlab,1.67151
+PFL,5,stacking,PFL,WEDGE,humanreachTUMlab,177.436
+Reduced Speed,1,robco,REDUCEDSPEED,EDGE,humanreachTUMlab,81.5283
+PFL,4,robco,PFL,BLUNT,humanreachTUMlab,138.476
+PFL,5,robco,PFL,BLUNT,humanreachTUMlab,140.12
+PFL No Contact Classification,6,robco,PFL,BLUNT,humanreachablationnocontactclass,135.136
+Reflected Mass,1,screwing,REFLECTEDMASS,EDGE,humanreachTUMlab,144.804
+PFL,3,robco,PFL,SHEET,humanreachTUMlab,159.451
+Reflected Mass,1,tower,REFLECTEDMASS,SHEET,humanreachTUMlab,152.338
+PFL,2,tower,PFL,EDGE,humanreachTUMlab,177.195
+PFL No Contact Classification,6,tower,PFL,BLUNT,humanreachablationnocontactclass,145.668
+Reflected Mass,3,tower,REFLECTEDMASS,SHEET,humanreachTUMlab,142.918
+Reduced Speed Zone,3,puzzle,SWITCH,EDGE,humanreachTUMlab,98.3135
+SSM,2,robco,SSM,EDGE,humanreachTUMlab,104.471
+SSM,1,stacking,SSM,EDGE,humanreachTUMlab,143.832
+SSM,5,stacking,SSM,EDGE,humanreachTUMlab,154.378
+PFL,4,stacking,PFL,SHEET,humanreachTUMlab,176.367
+Reflected Mass,4,tower,REFLECTEDMASS,WEDGE,humanreachTUMlab,144.474
+PFL No Contact Classification,1,stacking,PFL,SHEET,humanreachablationnocontactclass,165.974
+PFL,1,screwing,PFL,BLUNT,humanreachTUMlab,167.538
+Reflected Mass,6,screwing,REFLECTEDMASS,SHEET,humanreachTUMlab,148.171
+PFL,5,robco,PFL,EDGE,humanreachTUMlab,139.961
+OFF,1,screwing,OFF,EDGE,humanreachTUMlab,179.844
+PFL,5,tower,PFL,BLUNT,humanreachTUMlab,175.036
+Reduced Speed Zone,3,screwing,SWITCH,EDGE,humanreachTUMlab,96.6174
+OFF,6,puzzle,OFF,EDGE,humanreachTUMlab,179.844
+PFL No Contact Classification,1,screwing,PFL,WEDGE,humanreachablationnocontactclass,148.109
+PFL,5,tower,PFL,EDGE,humanreachTUMlab,174.813
+Reduced Speed Zone,4,stacking,SWITCH,EDGE,humanreachTUMlab,148.976
+PFL,3,stacking,PFL,WEDGE,humanreachTUMlab,177.104
+PFL No Contact Classification,3,robco,PFL,SHEET,humanreachablationnocontactclass,136.726
+Reflected Mass,5,screwing,REFLECTEDMASS,BLUNT,humanreachTUMlab,147.713
+PFL No Contact Classification,3,tower,PFL,BLUNT,humanreachablationnocontactclass,157.575
+PFL,6,stacking,PFL,EDGE,humanreachTUMlab,177.115
+PFL,2,screwing,PFL,EDGE,humanreachTUMlab,173.564
+OFF,2,screwing,OFF,EDGE,humanreachTUMlab,179.844
+SSM Zone,6,puzzle,ZONESSM,EDGE,humanreachTUMlab,0.0
+Reflected Mass,4,puzzle,REFLECTEDMASS,SHEET,humanreachTUMlab,142.102
+Reduced Speed Zone,6,stacking,SWITCH,EDGE,humanreachTUMlab,152.291
+Reflected Mass,2,puzzle,REFLECTEDMASS,WEDGE,humanreachTUMlab,146.037
+PFL,5,puzzle,PFL,EDGE,humanreachTUMlab,152.599
+PFL No Contact Classification,2,robco,PFL,BLUNT,humanreachablationnocontactclass,153.041
+Reduced Speed Zone,1,puzzle,SWITCH,EDGE,humanreachTUMlab,140.759
+SSM Zone,6,screwing,ZONESSM,EDGE,humanreachTUMlab,0.0
+PFL No Contact Classification,1,puzzle,PFL,SHEET,humanreachablationnocontactclass,166.113
+Reflected Mass,5,puzzle,REFLECTEDMASS,WEDGE,humanreachTUMlab,140.13
+PFL No Contact Classification,6,screwing,PFL,BLUNT,humanreachablationnocontactclass,45.5356
+PFL No Contact Classification,1,robco,PFL,SHEET,humanreachablationnocontactclass,154.067
+Reduced Speed Zone,4,robco,SWITCH,EDGE,humanreachTUMlab,71.5838
+PFL,2,screwing,PFL,WEDGE,humanreachTUMlab,173.705
+Reflected Mass,3,puzzle,REFLECTEDMASS,SHEET,humanreachTUMlab,140.838
+Reflected Mass,6,tower,REFLECTEDMASS,WEDGE,humanreachTUMlab,146.959
+Reflected Mass,5,robco,REFLECTEDMASS,SHEET,humanreachTUMlab,143.91
+PFL,3,puzzle,PFL,EDGE,humanreachTUMlab,157.91
+Reduced Speed,2,robco,REDUCEDSPEED,EDGE,humanreachTUMlab,55.4734
+PFL No Contact Classification,6,tower,PFL,WEDGE,humanreachablationnocontactclass,136.288
+PFL No Contact Classification,5,screwing,PFL,WEDGE,humanreachablationnocontactclass,142.769
+PFL,6,stacking,PFL,SHEET,humanreachTUMlab,177.5
+OFF,5,robco,OFF,EDGE,humanreachTUMlab,179.844
+Reflected Mass,6,screwing,REFLECTEDMASS,WEDGE,humanreachTUMlab,143.727
+Reduced Speed Zone,3,tower,SWITCH,EDGE,humanreachTUMlab,112.864
+PFL,3,screwing,PFL,EDGE,humanreachTUMlab,160.53
+PFL,5,stacking,PFL,BLUNT,humanreachTUMlab,177.438
+PFL,2,robco,PFL,BLUNT,humanreachTUMlab,166.503
+Reflected Mass,3,stacking,REFLECTEDMASS,BLUNT,humanreachTUMlab,154.152
+SSM Zone,6,robco,ZONESSM,EDGE,humanreachTUMlab,13.2631
+Reduced Speed,1,screwing,REDUCEDSPEED,EDGE,humanreachTUMlab,87.7018
+PFL No Contact Classification,2,screwing,PFL,SHEET,humanreachablationnocontactclass,158.938
+PFL,2,puzzle,PFL,WEDGE,humanreachTUMlab,173.666
+OFF,3,screwing,OFF,EDGE,humanreachTUMlab,179.844
+PFL No Contact Classification,2,tower,PFL,BLUNT,humanreachablationnocontactclass,165.659
+PFL No Contact Classification,2,tower,PFL,WEDGE,humanreachablationnocontactclass,162.295
+Reflected Mass,3,screwing,REFLECTEDMASS,EDGE,humanreachTUMlab,126.826
+Reflected Mass,4,robco,REFLECTEDMASS,WEDGE,humanreachTUMlab,136.916
+Reflected Mass,6,stacking,REFLECTEDMASS,WEDGE,humanreachTUMlab,161.468
+PFL No Contact Classification,1,stacking,PFL,EDGE,humanreachablationnocontactclass,165.245
+PFL,6,robco,PFL,SHEET,humanreachTUMlab,151.25
+Reflected Mass,1,robco,REFLECTEDMASS,BLUNT,humanreachTUMlab,154.012
+PFL,4,robco,PFL,EDGE,humanreachTUMlab,138.443
+Reflected Mass,4,puzzle,REFLECTEDMASS,BLUNT,humanreachTUMlab,144.273
+PFL,5,puzzle,PFL,SHEET,humanreachTUMlab,152.729
+PFL No Contact Classification,4,puzzle,PFL,SHEET,humanreachablationnocontactclass,143.418
+PFL,2,screwing,PFL,BLUNT,humanreachTUMlab,173.73
+Reflected Mass,2,tower,REFLECTEDMASS,EDGE,humanreachTUMlab,145.975
+Reflected Mass,4,screwing,REFLECTEDMASS,EDGE,humanreachTUMlab,130.275
+Reflected Mass,4,screwing,REFLECTEDMASS,WEDGE,humanreachTUMlab,139.05
+PFL,4,robco,PFL,WEDGE,humanreachTUMlab,138.476
+PFL No Contact Classification,4,tower,PFL,WEDGE,humanreachablationnocontactclass,139.584
+SSM,4,screwing,SSM,EDGE,humanreachTUMlab,73.5381
+SSM,5,screwing,SSM,EDGE,humanreachTUMlab,89.3504
+PFL,1,robco,PFL,EDGE,humanreachTUMlab,168.671
+PFL No Contact Classification,6,stacking,PFL,SHEET,humanreachablationnocontactclass,166.014
+PFL No Contact Classification,5,screwing,PFL,SHEET,humanreachablationnocontactclass,142.846
+Reflected Mass,2,puzzle,REFLECTEDMASS,EDGE,humanreachTUMlab,136.931
+Reflected Mass,4,robco,REFLECTEDMASS,BLUNT,humanreachTUMlab,140.425
+PFL No Contact Classification,5,robco,PFL,EDGE,humanreachablationnocontactclass,110.307
+Reflected Mass,5,tower,REFLECTEDMASS,WEDGE,humanreachTUMlab,144.561
+PFL,6,tower,PFL,WEDGE,humanreachTUMlab,172.365
+PFL No Contact Classification,3,robco,PFL,EDGE,humanreachablationnocontactclass,132.028
+SSM Zone,2,robco,ZONESSM,EDGE,humanreachTUMlab,38.8302
+Reflected Mass,4,tower,REFLECTEDMASS,EDGE,humanreachTUMlab,135.128
+PFL,1,puzzle,PFL,EDGE,humanreachTUMlab,174.651
+PFL No Contact Classification,5,robco,PFL,SHEET,humanreachablationnocontactclass,115.532
+PFL No Contact Classification,3,stacking,PFL,SHEET,humanreachablationnocontactclass,168.302
+Reflected Mass,1,robco,REFLECTEDMASS,WEDGE,humanreachTUMlab,149.793
+Reduced Speed,6,stacking,REDUCEDSPEED,EDGE,humanreachTUMlab,83.2202
+Reflected Mass,2,robco,REFLECTEDMASS,BLUNT,humanreachTUMlab,155.177
+SSM Zone,5,tower,ZONESSM,EDGE,humanreachTUMlab,0.0
+PFL No Contact Classification,2,stacking,PFL,BLUNT,humanreachablationnocontactclass,171.369
+PFL No Contact Classification,5,tower,PFL,SHEET,humanreachablationnocontactclass,157.575
+SSM Zone,4,tower,ZONESSM,EDGE,humanreachTUMlab,0.0
+PFL,4,tower,PFL,SHEET,humanreachTUMlab,173.217
+PFL,1,robco,PFL,WEDGE,humanreachTUMlab,168.743
+PFL No Contact Classification,1,tower,PFL,WEDGE,humanreachablationnocontactclass,152.525
+PFL No Contact Classification,2,robco,PFL,SHEET,humanreachablationnocontactclass,152.911
+Reduced Speed Zone,5,puzzle,SWITCH,EDGE,humanreachTUMlab,77.9048
+Reduced Speed Zone,5,robco,SWITCH,EDGE,humanreachTUMlab,91.9878
+Reflected Mass,6,stacking,REFLECTEDMASS,SHEET,humanreachTUMlab,161.567
+Reduced Speed Zone,6,tower,SWITCH,EDGE,humanreachTUMlab,99.3077
+PFL No Contact Classification,2,tower,PFL,EDGE,humanreachablationnocontactclass,161.325
+SSM,2,tower,SSM,EDGE,humanreachTUMlab,134.928
+PFL,2,robco,PFL,EDGE,humanreachTUMlab,166.451
+SSM Zone,6,stacking,ZONESSM,EDGE,humanreachTUMlab,53.5139
+Reflected Mass,6,puzzle,REFLECTEDMASS,SHEET,humanreachTUMlab,146.402
+Reduced Speed Zone,2,puzzle,SWITCH,EDGE,humanreachTUMlab,130.518
+Reduced Speed Zone,5,stacking,SWITCH,EDGE,humanreachTUMlab,155.892
+PFL,1,stacking,PFL,BLUNT,humanreachTUMlab,177.791
+Reflected Mass,6,robco,REFLECTEDMASS,EDGE,humanreachTUMlab,137.192
+SSM Zone,4,robco,ZONESSM,EDGE,humanreachTUMlab,9.00001
+OFF,3,puzzle,OFF,EDGE,humanreachTUMlab,179.844
+Reduced Speed Zone,6,robco,SWITCH,EDGE,humanreachTUMlab,84.43
+SSM,2,screwing,SSM,EDGE,humanreachTUMlab,121.326
+PFL,3,robco,PFL,BLUNT,humanreachTUMlab,159.447
+PFL No Contact Classification,4,screwing,PFL,BLUNT,humanreachablationnocontactclass,136.942
+PFL,4,tower,PFL,EDGE,humanreachTUMlab,169.958
+SSM,1,puzzle,SSM,EDGE,humanreachTUMlab,150.17
+PFL No Contact Classification,2,robco,PFL,WEDGE,humanreachablationnocontactclass,146.777
+PFL No Contact Classification,1,tower,PFL,EDGE,humanreachablationnocontactclass,148.232
+Reflected Mass,4,stacking,REFLECTEDMASS,EDGE,humanreachTUMlab,146.405
+PFL,5,stacking,PFL,EDGE,humanreachTUMlab,177.361
+PFL No Contact Classification,4,tower,PFL,BLUNT,humanreachablationnocontactclass,144.699
+Reflected Mass,4,puzzle,REFLECTEDMASS,EDGE,humanreachTUMlab,125.319
+Reduced Speed,4,screwing,REDUCEDSPEED,EDGE,humanreachTUMlab,88.038
+PFL,6,puzzle,PFL,SHEET,humanreachTUMlab,163.379
+PFL,5,stacking,PFL,SHEET,humanreachTUMlab,177.436
+PFL No Contact Classification,3,stacking,PFL,WEDGE,humanreachablationnocontactclass,164.136
+Reflected Mass,1,tower,REFLECTEDMASS,BLUNT,humanreachTUMlab,152.344
+PFL No Contact Classification,3,puzzle,PFL,EDGE,humanreachablationnocontactclass,142.394
+OFF,5,puzzle,OFF,EDGE,humanreachTUMlab,179.844
+PFL,3,tower,PFL,BLUNT,humanreachTUMlab,174.929
+Reflected Mass,6,robco,REFLECTEDMASS,WEDGE,humanreachTUMlab,146.273
+PFL,3,screwing,PFL,BLUNT,humanreachTUMlab,160.938
+PFL No Contact Classification,2,stacking,PFL,WEDGE,humanreachablationnocontactclass,165.284
+Reduced Speed Zone,4,puzzle,SWITCH,EDGE,humanreachTUMlab,84.7384
+OFF,5,screwing,OFF,EDGE,humanreachTUMlab,179.844
+SSM Zone,1,robco,ZONESSM,EDGE,humanreachTUMlab,7.77329
+PFL No Contact Classification,4,stacking,PFL,WEDGE,humanreachablationnocontactclass,162.295
+SSM,3,screwing,SSM,EDGE,humanreachTUMlab,89.2795
+Reflected Mass,3,puzzle,REFLECTEDMASS,WEDGE,humanreachTUMlab,138.306
+PFL No Contact Classification,4,stacking,PFL,SHEET,humanreachablationnocontactclass,162.295
+OFF,6,robco,OFF,EDGE,humanreachTUMlab,179.844
+PFL,1,screwing,PFL,EDGE,humanreachTUMlab,167.403
+PFL No Contact Classification,3,screwing,PFL,EDGE,humanreachablationnocontactclass,137.069
+Reflected Mass,1,puzzle,REFLECTEDMASS,EDGE,humanreachTUMlab,143.339
+Reduced Speed,2,stacking,REDUCEDSPEED,EDGE,humanreachTUMlab,71.7976
+Reduced Speed,1,stacking,REDUCEDSPEED,EDGE,humanreachTUMlab,49.9379
+PFL,5,puzzle,PFL,BLUNT,humanreachTUMlab,152.729
+OFF,1,robco,OFF,EDGE,humanreachTUMlab,179.844
+SSM,6,robco,SSM,EDGE,humanreachTUMlab,68.6496
+PFL No Contact Classification,3,puzzle,PFL,WEDGE,humanreachablationnocontactclass,144.22
+PFL,4,screwing,PFL,EDGE,humanreachTUMlab,153.303
+Reduced Speed,4,tower,REDUCEDSPEED,EDGE,humanreachTUMlab,75.4728
+Reflected Mass,2,stacking,REFLECTEDMASS,WEDGE,humanreachTUMlab,155.386
+SSM Zone,3,tower,ZONESSM,EDGE,humanreachTUMlab,0.0
+Reflected Mass,5,puzzle,REFLECTEDMASS,SHEET,humanreachTUMlab,143.093
+PFL No Contact Classification,4,puzzle,PFL,BLUNT,humanreachablationnocontactclass,143.67
+Reduced Speed,3,screwing,REDUCEDSPEED,EDGE,humanreachTUMlab,55.2204
+Reflected Mass,4,robco,REFLECTEDMASS,SHEET,humanreachTUMlab,138.964
+SSM,3,tower,SSM,EDGE,humanreachTUMlab,108.436
+Reflected Mass,3,tower,REFLECTEDMASS,EDGE,humanreachTUMlab,129.924
+SSM,2,stacking,SSM,EDGE,humanreachTUMlab,143.832
+Reflected Mass,4,tower,REFLECTEDMASS,BLUNT,humanreachTUMlab,146.142
+PFL,4,puzzle,PFL,SHEET,humanreachTUMlab,154.956
+PFL,2,tower,PFL,SHEET,humanreachTUMlab,177.791
+OFF,6,tower,OFF,EDGE,humanreachTUMlab,179.844
+PFL No Contact Classification,4,screwing,PFL,WEDGE,humanreachablationnocontactclass,134.217
+SSM Zone,1,screwing,ZONESSM,EDGE,humanreachTUMlab,0.0
+OFF,6,screwing,OFF,EDGE,humanreachTUMlab,179.844
+SSM,6,puzzle,SSM,EDGE,humanreachTUMlab,101.244
+Reduced Speed,5,tower,REDUCEDSPEED,EDGE,humanreachTUMlab,83.066
+Reflected Mass,5,tower,REFLECTEDMASS,EDGE,humanreachTUMlab,139.685
+PFL No Contact Classification,1,screwing,PFL,EDGE,humanreachablationnocontactclass,148.108
+PFL No Contact Classification,5,stacking,PFL,BLUNT,humanreachablationnocontactclass,168.18
+SSM,4,puzzle,SSM,EDGE,humanreachTUMlab,68.2141
+PFL,6,puzzle,PFL,BLUNT,humanreachTUMlab,163.379
+SSM Zone,5,screwing,ZONESSM,EDGE,humanreachTUMlab,0.0
+PFL No Contact Classification,1,robco,PFL,BLUNT,humanreachablationnocontactclass,156.571
+Reflected Mass,6,robco,REFLECTEDMASS,SHEET,humanreachTUMlab,147.227
+Reflected Mass,5,stacking,REFLECTEDMASS,BLUNT,humanreachTUMlab,159.624
+PFL No Contact Classification,6,puzzle,PFL,BLUNT,humanreachablationnocontactclass,148.0
+SSM Zone,4,puzzle,ZONESSM,EDGE,humanreachTUMlab,0.0
+Reflected Mass,5,screwing,REFLECTEDMASS,WEDGE,humanreachTUMlab,143.237
+Reflected Mass,1,stacking,REFLECTEDMASS,BLUNT,humanreachTUMlab,159.771
+SSM Zone,4,screwing,ZONESSM,EDGE,humanreachTUMlab,0.0
+PFL,2,puzzle,PFL,SHEET,humanreachTUMlab,173.665
+Reflected Mass,6,screwing,REFLECTEDMASS,BLUNT,humanreachTUMlab,149.269
+PFL No Contact Classification,5,tower,PFL,EDGE,humanreachablationnocontactclass,156.425
+Reduced Speed Zone,6,screwing,SWITCH,EDGE,humanreachTUMlab,105.881
+PFL No Contact Classification,1,screwing,PFL,SHEET,humanreachablationnocontactclass,148.104
+PFL,6,robco,PFL,EDGE,humanreachTUMlab,151.148
+PFL No Contact Classification,5,tower,PFL,BLUNT,humanreachablationnocontactclass,157.578
+Reduced Speed Zone,2,tower,SWITCH,EDGE,humanreachTUMlab,135.29
+Reflected Mass,4,robco,REFLECTEDMASS,EDGE,humanreachTUMlab,127.587
+Reflected Mass,5,tower,REFLECTEDMASS,SHEET,humanreachTUMlab,150.063
+Reflected Mass,1,screwing,REFLECTEDMASS,BLUNT,humanreachTUMlab,154.857
+Reduced Speed,3,tower,REDUCEDSPEED,EDGE,humanreachTUMlab,75.5973
+PFL No Contact Classification,1,stacking,PFL,WEDGE,humanreachablationnocontactclass,165.284
+PFL No Contact Classification,1,tower,PFL,BLUNT,humanreachablationnocontactclass,156.725
+Reflected Mass,6,tower,REFLECTEDMASS,BLUNT,humanreachTUMlab,150.016
+PFL No Contact Classification,2,stacking,PFL,SHEET,humanreachablationnocontactclass,165.974
+PFL,6,stacking,PFL,WEDGE,humanreachTUMlab,177.493
+PFL No Contact Classification,5,screwing,PFL,BLUNT,humanreachablationnocontactclass,143.083
+PFL No Contact Classification,3,stacking,PFL,BLUNT,humanreachablationnocontactclass,170.081
+PFL No Contact Classification,3,tower,PFL,EDGE,humanreachablationnocontactclass,141.816
+OFF,4,robco,OFF,EDGE,humanreachTUMlab,179.844
+Reduced Speed,3,puzzle,REDUCEDSPEED,EDGE,humanreachTUMlab,56.0109
+Reduced Speed,3,robco,REDUCEDSPEED,EDGE,humanreachTUMlab,81.5283
+Reflected Mass,1,puzzle,REFLECTEDMASS,BLUNT,humanreachTUMlab,151.587
+PFL No Contact Classification,1,puzzle,PFL,EDGE,humanreachablationnocontactclass,163.888
+PFL No Contact Classification,2,puzzle,PFL,EDGE,humanreachablationnocontactclass,155.121
+OFF,6,stacking,OFF,EDGE,humanreachTUMlab,179.844
+PFL,4,stacking,PFL,EDGE,humanreachTUMlab,176.269
+SSM,6,screwing,SSM,EDGE,humanreachTUMlab,101.963
+SSM Zone,4,stacking,ZONESSM,EDGE,humanreachTUMlab,51.7674
+SSM,4,robco,SSM,EDGE,humanreachTUMlab,28.8841
+PFL,1,tower,PFL,EDGE,humanreachTUMlab,175.25
+PFL No Contact Classification,2,screwing,PFL,EDGE,humanreachablationnocontactclass,155.773
+PFL,2,puzzle,PFL,EDGE,humanreachTUMlab,173.652
+Reflected Mass,5,puzzle,REFLECTEDMASS,EDGE,humanreachTUMlab,129.579
+PFL,4,tower,PFL,BLUNT,humanreachTUMlab,173.221
+PFL No Contact Classification,4,robco,PFL,BLUNT,humanreachablationnocontactclass,121.853
+Reflected Mass,5,screwing,REFLECTEDMASS,EDGE,humanreachTUMlab,135.347
+Reduced Speed,1,tower,REDUCEDSPEED,EDGE,humanreachTUMlab,47.9992
+PFL,4,stacking,PFL,BLUNT,humanreachTUMlab,176.361
+Reflected Mass,1,robco,REFLECTEDMASS,EDGE,humanreachTUMlab,142.285
+Reflected Mass,6,stacking,REFLECTEDMASS,BLUNT,humanreachTUMlab,161.806
+Reflected Mass,1,stacking,REFLECTEDMASS,EDGE,humanreachTUMlab,150.375
+Reduced Speed,5,screwing,REDUCEDSPEED,EDGE,humanreachTUMlab,55.5831
+PFL,4,puzzle,PFL,WEDGE,humanreachTUMlab,154.48
+Reflected Mass,2,screwing,REFLECTEDMASS,BLUNT,humanreachTUMlab,152.598
+Reflected Mass,1,robco,REFLECTEDMASS,SHEET,humanreachTUMlab,153.789
+SSM,5,puzzle,SSM,EDGE,humanreachTUMlab,61.0749
+SSM,6,stacking,SSM,EDGE,humanreachTUMlab,154.412
+PFL No Contact Classification,6,puzzle,PFL,EDGE,humanreachablationnocontactclass,147.963
+Reduced Speed Zone,2,robco,SWITCH,EDGE,humanreachTUMlab,116.068
+Reduced Speed Zone,1,screwing,SWITCH,EDGE,humanreachTUMlab,122.77
+Reflected Mass,2,puzzle,REFLECTEDMASS,SHEET,humanreachTUMlab,148.26
+PFL,1,robco,PFL,SHEET,humanreachTUMlab,168.738
+PFL No Contact Classification,5,puzzle,PFL,SHEET,humanreachablationnocontactclass,140.588
+PFL,1,stacking,PFL,WEDGE,humanreachTUMlab,177.777
+OFF,4,tower,OFF,EDGE,humanreachTUMlab,179.844
+PFL,3,tower,PFL,SHEET,humanreachTUMlab,174.927
+SSM,1,robco,SSM,EDGE,humanreachTUMlab,122.84
+SSM Zone,1,tower,ZONESSM,EDGE,humanreachTUMlab,0.507001
+Reflected Mass,2,stacking,REFLECTEDMASS,BLUNT,humanreachTUMlab,159.771
+PFL,1,tower,PFL,WEDGE,humanreachTUMlab,175.339
+Reduced Speed,1,puzzle,REDUCEDSPEED,EDGE,humanreachTUMlab,73.4636
+PFL,4,puzzle,PFL,EDGE,humanreachTUMlab,153.903
+Reduced Speed Zone,3,robco,SWITCH,EDGE,humanreachTUMlab,92.5014
+PFL No Contact Classification,3,screwing,PFL,WEDGE,humanreachablationnocontactclass,137.328
+PFL,6,robco,PFL,WEDGE,humanreachTUMlab,151.271
+Reflected Mass,3,robco,REFLECTEDMASS,SHEET,humanreachTUMlab,142.698

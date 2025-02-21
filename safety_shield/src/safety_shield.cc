@@ -139,7 +139,11 @@ void SafetyShield::reset(double init_x, double init_y, double init_z, double ini
   robot_reach_->reset(init_x, init_y, init_z, init_roll, init_pitch, init_yaw);
   human_reach_->reset();
   eef_contact_type_ = eef_contact_type;
-  buildMaxContactEnergies();
+  try {
+    buildMaxContactEnergies();
+  } catch (std::exception& e) {
+    spdlog::error("Error building max contact energies: {}", e.what());
+  }
   environment_elements_ = environment_elements;
   std::vector<double> prev_dq;
   for (int i = 0; i < nb_joints_; i++) {
@@ -631,7 +635,12 @@ bool SafetyShield::verifySafety(Motion& current_motion, Motion& goal_motion, con
   if (shield_type_ == ShieldType::PFL) {
     is_safe = verifyContactEnergySafetyByContactType(time_points, interval_edges_motions, collision_index);
   } else if (shield_type_ == ShieldType::REDUCEDSPEED) {
-    is_safe = verifyReducedSpeed(time_points, interval_edges_motions, collision_index);
+    try {
+      is_safe = verifyReducedSpeed(time_points, interval_edges_motions, collision_index);
+    } catch (const std::exception& exc) {
+      spdlog::error("Exception in SafetyShield::verifySafety: {}", exc.what());
+      is_safe = false;
+    }
   } else if (shield_type_ == ShieldType::SWITCH) {
     is_safe = verifySwitchSpeed(time_points, interval_edges_motions, collision_index);
   } else if (shield_type_ == ShieldType::REFLECTEDMASS) {

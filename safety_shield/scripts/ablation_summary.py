@@ -181,8 +181,31 @@ for index, row in pivot_df.iterrows():
     calculation_times_list.append(f'{mean:.2f} $\\pm$ {std:.2f}')
 pivot_df['Calculation times [ms]'] = calculation_times_list
 
+# Rename columns
+column_renames = {
+    'BLUNT': 'Blunt',
+    'EDGE': 'Edge',
+    'SHEET': 'Sheet',
+    'WEDGE': 'Wedge',
+    'method': 'Method',
+}
+pivot_df.rename(columns=column_renames, inplace=True)
+
+# Create multicolumn table.
+# Split table into Method, EEF types, and Calculation times
+method_df = pivot_df[['Method']]
+eef_df = pivot_df[['Blunt', 'Edge', 'Sheet', 'Wedge']]
+calc_times_df = pivot_df[['Calculation times [ms]']]
+# Concatenate the tables
+out_df = pd.concat(
+    {
+        " ": method_df,
+        "End-effector types": eef_df,
+        "  ": calc_times_df,
+    }, axis=1)
+
 # Construct and save the latex table
-latex_table = pivot_df.to_latex(index=False, header=True, column_format='l' + 'c' * len(pivot_df.columns[1:]), 
+latex_table = out_df.to_latex(index=False, header=True, column_format='l' + 'c' * len(pivot_df.columns[1:]), multicolumn_format='c',
                                 escape=False, longtable=False)
 with open('./data/ablation_results/summary_table.tex', 'w') as file:
     file.write(latex_table)

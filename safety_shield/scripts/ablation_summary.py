@@ -16,15 +16,19 @@ def read_last_line(filename):
 
 
 def read_first_line(filename):
-    with open(filename, mode='r') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            # Return the first row
-            return row
+    try:
+        with open(filename, mode='r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                # Return the first row
+                return row
+    except Exception as e:
+        print(f"Error reading {filename}: {e}")
+        return None
 
 
 # Define the pattern to match the CSV files in the specified directory
-csv_files = glob.glob('./data/ablation_results/vicon_p_*_mocap_*_path_s.csv')
+path_s_csv_files = glob.glob('./data/ablation_results/vicon_p_*_mocap_*_path_s.csv')
 
 # Prepare an empty list to store data from each file
 data_list = []
@@ -45,9 +49,21 @@ sorting = ["PFL", "PFL No Contact Classification", "Reflected Mass", "Reduced Sp
 
 methods_with_edge_only = ["Reduced Speed Zone", "SSM", "Reduced Speed", "SSM Zone"]
 
+calculation_times = {
+  "OFF": np.array([]),
+  "PFL": np.array([]),
+  "PFL No Contact Classification": np.array([]),
+  "Reduced Speed": np.array([]),
+  "Reflected Mass": np.array([]),
+  "SSM": np.array([]),
+  "Reduced Speed Zone": np.array([]),
+  "SSM Zone": np.array([]),
+}
+
 # Loop through all matching CSV files
-for file in csv_files:
+for file in path_s_csv_files:
     filename = os.path.basename(file)
+    file_normal = file.replace('_path_s.csv', '.csv')
     parts = filename.split('_')
 
     n = parts[2]
@@ -64,6 +80,9 @@ for file in csv_files:
     last_path_s = float(first_line[0])
     method = methods[f'{mode}_{config}']
 
+    # Read in all calculation times (col: calc_time) 
+    calc_times = pd.read_csv(file_normal, usecols=[' calc_time'], on_bad_lines='skip').values
+    calculation_times[method] = np.append(calculation_times[method], calc_times)
     data_list.append([method, n, task, mode, eef, config, last_path_s])
 
 # Create a DataFrame from the compiled data list
@@ -151,6 +170,16 @@ df_sorted['mean_std'] = df_sorted.apply(lambda row: f"{row['mean_clean']} $\\pm$
 
 # Build the table to be columns = EEF type and rows = method
 pivot_df = df_sorted.pivot(index='method', columns='eef', values='mean_std').reset_index()
+
+# Add caculation times
+calculation_times_list = []
+for index, row in pivot_df.iterrows():
+    method = row['method']
+    calc_times = calculation_times[method]
+    mean = np.mean(calc_times) * 1000
+    std = np.std(calc_times) * 1000
+    calculation_times_list.append(f'{mean:.2f} $\\pm$ {std:.2f}')
+pivot_df['Calculation times [ms]'] = calculation_times_list
 
 # Construct and save the latex table
 latex_table = pivot_df.to_latex(index=False, header=True, column_format='l' + 'c' * len(pivot_df.columns[1:]), 

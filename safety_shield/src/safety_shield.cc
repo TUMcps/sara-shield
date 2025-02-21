@@ -205,7 +205,7 @@ bool SafetyShield::planSafetyShield(double pos, double vel, double acc, double v
     // Velocity at zero acceleration
     double v_at_a_0 = vel + acc * t_to_a_0 / 2;
     if (v_at_a_0 < 0) {
-      spdlog::warn("Velocity at zero acceleration is negative. The path calculations will be incorrect.");
+      spdlog::debug("Velocity at zero acceleration is negative. The path calculations will be incorrect.");
     }
 
     // If the velocity at zero acceleration is the goal velocity, use t_to_a_0 and max jerk and return

@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 
   std::string contact_type_str = "EDGE";
   if (argc >= 3) {
-    std::string contact_type_str = argv[2];
+    contact_type_str = argv[2];
   }
   safety_shield::ContactType contact_type;
   if (contact_type_str == "BLUNT") {
@@ -215,7 +215,6 @@ int main(int argc, char* argv[]) {
   for (int i = 0; i < n_robot_caps; i++) {
     myfile << "cap_r_" << i << "_x_1, cap_r_" << i << "_y_1, " << "cap_r_" << i << "_z_1, "; 
     myfile << "cap_r_" << i << "_x_2, cap_r_" << i << "_y_2, " << "cap_r_" << i << "_z_2, ";
-    myfile << "cap_r_" << i << "_r, ";
     if (i == n_robot_caps -1) {
       myfile << "cap_r_" << i << "_r";
       continue;
@@ -230,7 +229,6 @@ int main(int argc, char* argv[]) {
       continue;
     }
     auto human_measurement = human_measurements[measurement_counter];
-    measurement_counter++;
     t += sample_time;
     shield.humanMeasurement(human_measurement, t);
     clkStart = clock();
@@ -309,7 +307,11 @@ int main(int argc, char* argv[]) {
       }
       shield.setLongTermTrajectory((*precomputed_llts)[current_ltt_idx]);
     }
+    measurement_counter++;
   }
+  myfile.close();
+  myfile.open("../data/" + output_file_name + "_path_s.csv");
+  myfile << path_s << std::endl;
   myfile.close();
   spdlog::info("Debug finished.");
   return 0;

@@ -6,6 +6,9 @@ import numpy as np
 from scipy.stats import bootstrap
 
 
+PAPER_FOLDER = '/home/jakob/Nextcloud/Promotion/Paper/General_Safety_Framework/Paper/results/ablation_study/'
+
+
 def read_last_line(filename):
     with open(filename, 'rb') as file:
         file.seek(-2, os.SEEK_END)  # Go to the second last byte before EOF
@@ -36,28 +39,36 @@ data_list = []
 # Method names
 methods = {
   "OFF_humanreachTUMlab": "OFF",
-  "PFL_humanreachTUMlab": "PFL",
-  "PFL_humanreachablationnocontactclass": "PFL No Contact Classification",
-  "REDUCEDSPEED_humanreachTUMlab": "Reduced Speed",
-  "REFLECTEDMASS_humanreachTUMlab": "Reflected Mass",
-  "SSM_humanreachTUMlab": "SSM",
-  "SWITCH_humanreachTUMlab": "Reduced Speed Zone",
-  "ZONESSM_humanreachTUMlab": "SSM Zone",
+  "PFL_humanreachTUMlab": "\shield{} (Ours)",
+  "PFL_humanreachablationnocontactclass": "\shield{} without $c_{\mathrm{free}}$",
+  "REDUCEDSPEED_humanreachTUMlab": "Reduced speed PFL \cite{iso_2021_RoboticsSafety}",
+  "REFLECTEDMASS_humanreachTUMlab": "Reflected mass \cite{haddadin_2012_MakingRobots}",
+  "SSM_humanreachTUMlab": "Dynamic SSM \cite{beckert_2017_OnlineVerification, thumm_2022_ProvablySafe}",
+  "SWITCH_humanreachTUMlab": "Reduced speed zone \cite{svarny_2019_SafePhysical}",
+  "ZONESSM_humanreachTUMlab": "SSM zone \cite{iso_2021_RoboticsSafety}",
 }
 
-sorting = ["PFL", "PFL No Contact Classification", "Reflected Mass", "Reduced Speed Zone", "SSM", "Reduced Speed", "SSM Zone"]
+sorting = [
+    "ZONESSM_humanreachTUMlab",
+    "REDUCEDSPEED_humanreachTUMlab",
+    "SSM_humanreachTUMlab",
+    "SWITCH_humanreachTUMlab",
+    "REFLECTEDMASS_humanreachTUMlab",
+    "PFL_humanreachablationnocontactclass",
+    "PFL_humanreachTUMlab"
+]
 
-methods_with_edge_only = ["Reduced Speed Zone", "SSM", "Reduced Speed", "SSM Zone"]
+methods_with_edge_only = ["SWITCH_humanreachTUMlab", "SSM_humanreachTUMlab", "REDUCEDSPEED_humanreachTUMlab", "ZONESSM_humanreachTUMlab"]
 
 calculation_times = {
-  "OFF": np.array([]),
-  "PFL": np.array([]),
-  "PFL No Contact Classification": np.array([]),
-  "Reduced Speed": np.array([]),
-  "Reflected Mass": np.array([]),
-  "SSM": np.array([]),
-  "Reduced Speed Zone": np.array([]),
-  "SSM Zone": np.array([]),
+  "OFF_humanreachTUMlab": np.array([]),
+  "PFL_humanreachTUMlab": np.array([]),
+  "PFL_humanreachablationnocontactclass": np.array([]),
+  "REDUCEDSPEED_humanreachTUMlab": np.array([]),
+  "REFLECTEDMASS_humanreachTUMlab": np.array([]),
+  "SSM_humanreachTUMlab": np.array([]),
+  "SWITCH_humanreachTUMlab": np.array([]),
+  "ZONESSM_humanreachTUMlab": np.array([]),
 }
 
 # Loop through all matching CSV files
@@ -78,7 +89,7 @@ for file in path_s_csv_files:
         print(f"Skipping {file}")
         continue
     last_path_s = float(first_line[0])
-    method = methods[f'{mode}_{config}']
+    method = f'{mode}_{config}'
 
     # Read in all calculation times (col: calc_time) 
     calc_times = pd.read_csv(file_normal, usecols=[' calc_time'], on_bad_lines='skip').values
@@ -142,7 +153,7 @@ final_results.to_csv('./data/ablation_results/summary.csv', index=False)
 
 # >>> Create latex table <<<
 # Remove the "OFF" method
-df_filtered = final_results[final_results['method'] != 'OFF']
+df_filtered = final_results[final_results['method'] != 'OFF_humanreachTUMlab']
 
 # Repeat the edge values for the methods that only have edge measurements
 edge_specific_methods_df = df_filtered[(df_filtered['method'].isin(methods_with_edge_only)) & (df_filtered['eef'] == 'EDGE')]
@@ -191,16 +202,17 @@ column_renames = {
 }
 pivot_df.rename(columns=column_renames, inplace=True)
 
+# Rename methods
+pivot_df['Method'] = pivot_df['Method'].apply(lambda x: methods[x])
+
 # Create multicolumn table.
-# Split table into Method, EEF types, and Calculation times
 method_df = pivot_df[['Method']]
 eef_df = pivot_df[['Blunt', 'Edge', 'Sheet', 'Wedge']]
 calc_times_df = pivot_df[['Calculation times [ms]']]
-# Concatenate the tables
 out_df = pd.concat(
     {
         " ": method_df,
-        "End-effector types": eef_df,
+        "Efficiency per end-effector type [\%]": eef_df,
         "  ": calc_times_df,
     }, axis=1)
 
@@ -208,4 +220,7 @@ out_df = pd.concat(
 latex_table = out_df.to_latex(index=False, header=True, column_format='l' + 'c' * len(pivot_df.columns[1:]), multicolumn_format='c',
                                 escape=False, longtable=False)
 with open('./data/ablation_results/summary_table.tex', 'w') as file:
+    file.write(latex_table)
+
+with open(PAPER_FOLDER + '/summary_table.tex', 'w') as file:
     file.write(latex_table)

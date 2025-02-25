@@ -41,10 +41,10 @@ methods = {
   "OFF_humanreachTUMlab": "OFF",
   "PFL_humanreachTUMlab": "\shield{} (Ours)",
   "PFL_humanreachablationnocontactclass": "\shield{} without $c_{\mathrm{free}}$",
-  "REDUCEDSPEED_humanreachTUMlab": "Reduced speed PFL \cite{iso_2021_RoboticsSafety}",
+  "REDUCEDSPEED_humanreachTUMlab": "Reduced-speed PFL \cite{iso_2021_RoboticsSafety}",
   "REFLECTEDMASS_humanreachTUMlab": "Reflected mass \cite{haddadin_2012_MakingRobots}",
   "SSM_humanreachTUMlab": "Dynamic SSM \cite{beckert_2017_OnlineVerification, thumm_2022_ProvablySafe}",
-  "SWITCH_humanreachTUMlab": "Reduced speed zone \cite{svarny_2019_SafePhysical}",
+  "SWITCH_humanreachTUMlab": "Reduced-speed zone \cite{svarny_2019_SafePhysical}",
   "ZONESSM_humanreachTUMlab": "SSM zone \cite{iso_2021_RoboticsSafety}",
 }
 
@@ -217,8 +217,10 @@ out_df = pd.concat(
     }, axis=1)
 
 # Construct and save the latex table
-latex_table = out_df.to_latex(index=False, header=True, column_format='l' + 'c' * len(pivot_df.columns[1:]), multicolumn_format='c',
+with pd.option_context("max_colwidth", 1000):
+    latex_table = out_df.to_latex(index=False, header=True, column_format='l' + 'c' * len(pivot_df.columns[1:]), multicolumn_format='c',
                                 escape=False, longtable=False)
+
 with open('./data/ablation_results/summary_table.tex', 'w') as file:
     file.write(latex_table)
 

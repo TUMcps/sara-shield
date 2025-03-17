@@ -183,14 +183,24 @@ df_sorted['mean_std'] = df_sorted.apply(lambda row: f"{row['mean_clean']} $\\pm$
 pivot_df = df_sorted.pivot(index='method', columns='eef', values='mean_std').reset_index()
 
 # Add caculation times
-calculation_times_list = []
+mean_calc_times = np.array([])
+std_calc_times = np.array([])
 for index, row in pivot_df.iterrows():
     method = row['method']
     calc_times = calculation_times[method]
-    mean = np.mean(calc_times) * 1000
-    std = np.std(calc_times) * 1000
-    calculation_times_list.append(f'{mean:.2f} $\\pm$ {std:.2f}')
-pivot_df['Calculation times [ms]'] = calculation_times_list
+    mean_calc_times = np.append(mean_calc_times, np.mean(calc_times) * 1000)
+    std_calc_times = np.append(std_calc_times, np.std(calc_times) * 1000)
+
+pivot_df['mean_calc'] = mean_calc_times
+pivot_df['std_calc'] = std_calc_times
+
+# Make min calculation time bold
+min_calc_times = np.argmin(mean_calc_times)
+pivot_df['mean_clean_calc'] = pivot_df.apply(lambda row: f"{row['mean_calc']:.2f}", axis=1)
+pivot_df.loc[min_calc_times, 'mean_clean_calc'] = f"\\textbf{{{pivot_df.loc[min_calc_times, 'mean_calc']:.2f}}}"
+
+# Build the mean +/- std string
+pivot_df['Computation Time [ms]'] = pivot_df.apply(lambda row: f"{row['mean_clean_calc']} $\\pm$ {row['std_calc']:.2f}", axis=1)
 
 # Rename columns
 column_renames = {
@@ -208,11 +218,11 @@ pivot_df['Method'] = pivot_df['Method'].apply(lambda x: methods[x])
 # Create multicolumn table.
 method_df = pivot_df[['Method']]
 eef_df = pivot_df[['Blunt', 'Edge', 'Sheet', 'Wedge']]
-calc_times_df = pivot_df[['Calculation times [ms]']]
+calc_times_df = pivot_df[['Computation Time [ms]']]
 out_df = pd.concat(
     {
         " ": method_df,
-        "Efficiency per end-effector type [\%]": eef_df,
+        "Efficiency per End-Effector Type [\%]": eef_df,
         "  ": calc_times_df,
     }, axis=1)
 
@@ -220,6 +230,9 @@ out_df = pd.concat(
 with pd.option_context("max_colwidth", 1000):
     latex_table = out_df.to_latex(index=False, header=True, column_format='l' + 'c' * len(pivot_df.columns[1:]), multicolumn_format='c',
                                 escape=False, longtable=False)
+    latex_list = latex_table.splitlines()
+    latex_list.insert(3, '\\cmidrule(lr){2-5}')
+    latex_table = '\n'.join(latex_list)
 
 with open('./data/ablation_results/summary_table.tex', 'w') as file:
     file.write(latex_table)

@@ -1,45 +1,22 @@
+"""Create the ablation summary table.
+
+Requires to run combine_runs.py first!
+"""
 import pandas as pd
 import glob
 import os
 import csv
 import numpy as np
-from scipy.stats import bootstrap
+from scipy.stats import bootstrap, shapiro, wilcoxon
 
 
 PAPER_FOLDER = '/home/jakob/Nextcloud/Promotion/Paper/General_Safety_Framework/Paper/results/ablation_study/'
 
 
-def read_last_line(filename):
-    with open(filename, 'rb') as file:
-        file.seek(-2, os.SEEK_END)  # Go to the second last byte before EOF
-        while file.read(1) != b'\n':  # Keep moving backwards until you find a newline
-            file.seek(-2, os.SEEK_CUR)
-        last_line = file.readline().decode()  # Read and decode the last line
-    return last_line
-
-
-def read_first_line(filename):
-    try:
-        with open(filename, mode='r') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                # Return the first row
-                return row
-    except Exception as e:
-        print(f"Error reading {filename}: {e}")
-        return None
-
-
-# Define the pattern to match the CSV files in the specified directory
-path_s_csv_files = glob.glob('./data/ablation_results/vicon_p_*_mocap_*_path_s.csv')
-
-# Prepare an empty list to store data from each file
-data_list = []
-
 # Method names
 methods = {
   "OFF_humanreachTUMlab": "OFF",
-  "PFL_humanreachTUMlab": "\shield{} (Ours)",
+  "PFL_humanreachTUMlab": "\shield{} (\\textbf{ours})",
   "PFL_humanreachablationnocontactclass": "\shield{} without $c_{\mathrm{free}}$",
   "REDUCEDSPEED_humanreachTUMlab": "Reduced-speed PFL \cite{iso_2021_RoboticsSafety}",
   "REFLECTEDMASS_humanreachTUMlab": "Reflected mass \cite{haddadin_2012_MakingRobots}",
@@ -60,68 +37,23 @@ sorting = [
 
 methods_with_edge_only = ["SWITCH_humanreachTUMlab", "SSM_humanreachTUMlab", "REDUCEDSPEED_humanreachTUMlab", "ZONESSM_humanreachTUMlab"]
 
-calculation_times = {
-  "OFF_humanreachTUMlab": np.array([]),
-  "PFL_humanreachTUMlab": np.array([]),
-  "PFL_humanreachablationnocontactclass": np.array([]),
-  "REDUCEDSPEED_humanreachTUMlab": np.array([]),
-  "REFLECTEDMASS_humanreachTUMlab": np.array([]),
-  "SSM_humanreachTUMlab": np.array([]),
-  "SWITCH_humanreachTUMlab": np.array([]),
-  "ZONESSM_humanreachTUMlab": np.array([]),
+result_table = pd.read_csv('./data/ablation_results/all_results.csv')
+
+method_names = {
+  "OFF_humanreachTUMlab": "OFF",
+  "PFL_humanreachTUMlab": "\shield{} (\\textbf{ours})",
+  "PFL_humanreachablationnocontactclass": "\shield{} without $c_{\mathrm{free}}$",
+  "REDUCEDSPEED_humanreachTUMlab": "Reduced-speed PFL \cite{iso_2021_RoboticsSafety}",
+  "REFLECTEDMASS_humanreachTUMlab": "Reflected mass \cite{haddadin_2012_MakingRobots}",
+  "SSM_humanreachTUMlab": "Dynamic SSM \cite{beckert_2017_OnlineVerification, thumm_2022_ProvablySafe}",
+  "SWITCH_humanreachTUMlab": "Reduced-speed zone \cite{svarny_2019_SafePhysical}",
+  "ZONESSM_humanreachTUMlab": "SSM zone \cite{iso_2021_RoboticsSafety}",
 }
 
-# Loop through all matching CSV files
-for file in path_s_csv_files:
-    filename = os.path.basename(file)
-    file_normal = file.replace('_path_s.csv', '.csv')
-    parts = filename.split('_')
-
-    n = parts[2]
-    task = parts[3]
-    mode = parts[5]
-    eef = parts[6]
-    config = "".join(parts[7:-2]).replace('.csv', '')
-    # Read the current CSV file into a DataFrame
-    # df = pd.read_csv(file, on_bad_lines='warn')
-    first_line = read_first_line(file)
-    if first_line is None:
-        print(f"Skipping {file}")
-        continue
-    last_path_s = float(first_line[0])
-    method = f'{mode}_{config}'
-
-    # Read in all calculation times (col: calc_time) 
-    calc_times = pd.read_csv(file_normal, usecols=[' calc_time'], on_bad_lines='skip').values
-    calculation_times[method] = np.append(calculation_times[method], calc_times)
-    data_list.append([method, n, task, mode, eef, config, last_path_s])
-
-# Create a DataFrame from the compiled data list
-columns = ['method', 'user', 'task', 'mode', 'eef', 'config', 'path_s']
-result_table = pd.DataFrame(data_list, columns=columns)
-
-# Display the result table
-print(result_table)
-result_table.to_csv('./data/ablation_results/all_path_s.csv', index=False)
-
-
-## Calculate percentage of OFF method.
+methods = result_table['method'].unique()
 users = result_table['user'].unique()
 tasks = result_table['task'].unique()
-
-off_results = {}
-
-for user in users:
-    for task in tasks:
-        user_task_off_row = result_table[(result_table['user'] == user) & (result_table['task'] == task) & (result_table['mode'] == 'OFF')]
-        off_results[f"{user}_{task}"] = user_task_off_row['path_s'].values[0]
-
-# Add new percentage column to df. Init with zero.
-result_table['percentage'] = np.zeros(len(result_table))
-for index, row in result_table.iterrows():
-    off_value = off_results[f"{row['user']}_{row['task']}"]
-    result_table.at[index, 'percentage'] = row['path_s'] / off_value * 100
-
+eefs = result_table['eef'].unique()
 
 # Calculate mean and confidence interval, grouped by 'eef' and 'method'
 grouped_means = result_table.groupby(['eef', 'method'])['percentage'].mean().reset_index()
@@ -132,7 +64,7 @@ grouped_stds.rename(columns={'percentage': 'std'}, inplace=True)
 # Function to calculate bootstrap confidence interval
 def bootstrap_conf_interval(data, n_bootstrap=1000):
     # Using scipy's bootstrap function with BCa confidence interval
-    resampled_means = bootstrap((data,), np.mean, n_resamples=n_bootstrap, method='bca')
+    resampled_means = bootstrap((data,), np.mean, n_resamples=n_bootstrap, method='bca', confidence_level=0.999999426696856)
     return resampled_means.confidence_interval
 
 # Apply the bootstrap confidence interval function on each group
@@ -182,14 +114,14 @@ df_sorted['mean_std'] = df_sorted.apply(lambda row: f"{row['mean_clean']} $\\pm$
 # Build the table to be columns = EEF type and rows = method
 pivot_df = df_sorted.pivot(index='method', columns='eef', values='mean_std').reset_index()
 
-# Add caculation times
-mean_calc_times = np.array([])
-std_calc_times = np.array([])
+# >>> Add caculation times <<<
+mean_calc_times = []
+std_calc_times = []
 for index, row in pivot_df.iterrows():
     method = row['method']
-    calc_times = calculation_times[method]
-    mean_calc_times = np.append(mean_calc_times, np.mean(calc_times) * 1000)
-    std_calc_times = np.append(std_calc_times, np.std(calc_times) * 1000)
+    calc_times = result_table.loc[(result_table['method'] == method), 'step_time']
+    mean_calc_times.append(calc_times.mean() * 1000)
+    std_calc_times.append(calc_times.std() * 1000)
 
 pivot_df['mean_calc'] = mean_calc_times
 pivot_df['std_calc'] = std_calc_times
@@ -202,6 +134,67 @@ pivot_df.loc[min_calc_times, 'mean_clean_calc'] = f"\\textbf{{{pivot_df.loc[min_
 # Build the mean +/- std string
 pivot_df['Computation Time [ms]'] = pivot_df.apply(lambda row: f"{row['mean_clean_calc']} $\\pm$ {row['std_calc']:.2f}", axis=1)
 
+# >>> Perform statistical hypothesis analysis <<<
+ours = "PFL_humanreachTUMlab"
+hypothesis_p_values = []
+# For all Methods
+for index, row in pivot_df.iterrows():
+    method = row['method']
+    if method == ours or method == "OFF_humanreachTUMlab":
+        hypothesis_p_values.append("--")
+        continue
+    n_trials = len(users) * len(tasks) * len(eefs)
+    percentage_diffs = np.zeros((n_trials,))
+    i = 0
+    # For all users
+    for user in users:
+        # For all tasks
+        for task in tasks:
+            # For all EEF types
+            for eef in eefs:
+                result_ours = result_table.loc[
+                    (result_table['method'] == ours) & 
+                    (result_table['user'] == user) & 
+                    (result_table['task'] == task) & 
+                    (result_table['eef'] == eef), 
+                    'percentage'
+                ]
+                # Get the value (if you expect a single value)
+                percentage_ours = result_ours.iloc[0] if not result_ours.empty else None
+                result_method = result_table.loc[
+                    (result_table['method'] == method) & 
+                    (result_table['user'] == user) & 
+                    (result_table['task'] == task) & 
+                    (result_table['eef'] == eef), 
+                    'percentage'
+                ]
+                # For some methods, the results are the same across EEF types, so we only recorded EDGE type.
+                if result_method.empty:
+                    if method not in methods_with_edge_only:
+                        raise ValueError(f"Method {method} has no values for EEF type {eef}!")
+                    result_method = result_table.loc[
+                        (result_table['method'] == method) & 
+                        (result_table['user'] == user) & 
+                        (result_table['task'] == task) & 
+                        (result_table['eef'] == "EDGE"), 
+                        'percentage'
+                    ]
+                percentage_method = result_method.iloc[0] if not result_method.empty else None
+                percentage_diffs[i] = percentage_ours - percentage_method
+                i += 1
+
+    # Visualization to show normal distribution
+    stat, p = shapiro(percentage_diffs)
+    if p > 0.05:
+        print(f"Performance difference between {ours} and {method} does is normally distributed! Paired t-test is prefferred over Wilcoxon signed-rank test!")
+    w_stat, p_value_wilcoxon = wilcoxon(x=percentage_diffs, alternative="greater")
+    hypothesis_p_values.append(p_value_wilcoxon)
+
+pivot_df['p-value of H1'] = hypothesis_p_values
+pivot_df['p-value of H1'] = pivot_df['p-value of H1'].apply(
+    lambda x: f"{float(x):.2e}" if isinstance(x, (int, float)) else x
+)
+
 # Rename columns
 column_renames = {
     'BLUNT': 'Blunt',
@@ -213,17 +206,21 @@ column_renames = {
 pivot_df.rename(columns=column_renames, inplace=True)
 
 # Rename methods
-pivot_df['Method'] = pivot_df['Method'].apply(lambda x: methods[x])
+pivot_df['Method'] = pivot_df['Method'].apply(lambda x: method_names[x])
 
 # Create multicolumn table.
 method_df = pivot_df[['Method']]
 eef_df = pivot_df[['Blunt', 'Edge', 'Sheet', 'Wedge']]
 calc_times_df = pivot_df[['Computation Time [ms]']]
+p_value_df = pivot_df[['p-value of H1']]
+p_val_rename = {'p-value of H1': 'p-value of \\textbf{{H1}}'}
+p_value_df.rename(columns=p_val_rename, inplace=True)
 out_df = pd.concat(
     {
         " ": method_df,
-        "Efficiency per End-Effector Type [\%]": eef_df,
-        "  ": calc_times_df,
+        "Efficiency per End Effector Type [\%]": eef_df,
+        "  ": p_value_df,
+        "   ": calc_times_df
     }, axis=1)
 
 # Construct and save the latex table

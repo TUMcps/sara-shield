@@ -11,6 +11,8 @@ from scipy.stats import bootstrap, shapiro, wilcoxon
 
 
 PAPER_FOLDER = '/home/jakob/Nextcloud/Promotion/Paper/General_Safety_Framework/Paper/results/ablation_study/'
+COMBINE_SHARP = True
+ADD_P_VALUE = False
 
 
 # Method names
@@ -53,6 +55,10 @@ method_names = {
 methods = result_table['method'].unique()
 users = result_table['user'].unique()
 tasks = result_table['task'].unique()
+if COMBINE_SHARP:
+    result_table["eef"] = result_table["eef"].replace("SHEET", "SHARP")
+    result_table["eef"] = result_table["eef"].replace("WEDGE", "SHARP")
+    result_table["eef"] = result_table["eef"].replace("EDGE", "SHARP")
 eefs = result_table['eef'].unique()
 
 # Calculate mean and confidence interval, grouped by 'eef' and 'method'
@@ -88,9 +94,13 @@ final_results.to_csv('./data/ablation_results/summary.csv', index=False)
 df_filtered = final_results[final_results['method'] != 'OFF_humanreachTUMlab']
 
 # Repeat the edge values for the methods that only have edge measurements
-edge_specific_methods_df = df_filtered[(df_filtered['method'].isin(methods_with_edge_only)) & (df_filtered['eef'] == 'EDGE')]
+if COMBINE_SHARP:
+    replacement_eef = "SHARP"
+else:
+    replacement_eef = "EDGE"
+edge_specific_methods_df = df_filtered[(df_filtered['method'].isin(methods_with_edge_only)) & (df_filtered['eef'] == replacement_eef)]
 unique_eefs = df_filtered['eef'].unique()
-unique_eefs = [eef for eef in unique_eefs if eef != 'EDGE']
+unique_eefs = [eef for eef in unique_eefs if eef != replacement_eef]
 rows_to_add = []
 for eef in unique_eefs:
     temp_df = edge_specific_methods_df.copy()
@@ -176,7 +186,7 @@ for index, row in pivot_df.iterrows():
                         (result_table['method'] == method) & 
                         (result_table['user'] == user) & 
                         (result_table['task'] == task) & 
-                        (result_table['eef'] == "EDGE"), 
+                        (result_table['eef'] == replacement_eef), 
                         'percentage'
                     ]
                 percentage_method = result_method.iloc[0] if not result_method.empty else None
@@ -190,19 +200,28 @@ for index, row in pivot_df.iterrows():
     w_stat, p_value_wilcoxon = wilcoxon(x=percentage_diffs, alternative="greater")
     hypothesis_p_values.append(p_value_wilcoxon)
 
-pivot_df['p-value of H1'] = hypothesis_p_values
-pivot_df['p-value of H1'] = pivot_df['p-value of H1'].apply(
-    lambda x: f"{float(x):.2e}" if isinstance(x, (int, float)) else x
-)
+if ADD_P_VALUE:
+    pivot_df['p-value of H1'] = hypothesis_p_values
+    pivot_df['p-value of H1'] = pivot_df['p-value of H1'].apply(
+        lambda x: f"{float(x):.2e}" if isinstance(x, (int, float)) else x
+    )
 
 # Rename columns
-column_renames = {
-    'BLUNT': 'Blunt',
-    'EDGE': 'Edge',
-    'SHEET': 'Sheet',
-    'WEDGE': 'Wedge',
-    'method': 'Method',
-}
+if COMBINE_SHARP:
+    column_renames = {
+        'BLUNT': 'Blunt',
+        'SHARP': 'Sharp',
+        'method': 'Method',
+    }
+else:
+    column_renames = {
+        'BLUNT': 'Blunt',
+        'EDGE': 'Edge',
+        'SHEET': 'Sheet',
+        'WEDGE': 'Wedge',
+        'method': 'Method',
+    }
+
 pivot_df.rename(columns=column_renames, inplace=True)
 
 # Rename methods
@@ -210,29 +229,47 @@ pivot_df['Method'] = pivot_df['Method'].apply(lambda x: method_names[x])
 
 # Create multicolumn table.
 method_df = pivot_df[['Method']]
-eef_df = pivot_df[['Blunt', 'Edge', 'Sheet', 'Wedge']]
+if COMBINE_SHARP:
+    eef_df = pivot_df[['Blunt', 'Sharp']]
+else:
+    eef_df = pivot_df[['Blunt', 'Edge', 'Sheet', 'Wedge']]
 calc_times_df = pivot_df[['Computation Time [ms]']]
-p_value_df = pivot_df[['p-value of H1']]
-p_val_rename = {'p-value of H1': 'p-value of \\textbf{{H1}}'}
-p_value_df.rename(columns=p_val_rename, inplace=True)
-out_df = pd.concat(
-    {
-        " ": method_df,
-        "Efficiency per End Effector Type [\%]": eef_df,
-        "  ": p_value_df,
-        "   ": calc_times_df
-    }, axis=1)
+if ADD_P_VALUE:
+    p_value_df = pivot_df[['p-value of H1']]
+    p_val_rename = {'p-value of H1': 'p-value of \\textbf{{H1}}'}
+    p_value_df.rename(columns=p_val_rename, inplace=True)
+    out_df = pd.concat(
+        {
+            " ": method_df,
+            "Efficiency per End Effector Type [\%]": eef_df,
+            "  ": p_value_df,
+            "   ": calc_times_df
+        }, axis=1)
+else:
+    out_df = pd.concat(
+        {
+            " ": method_df,
+            "Efficiency per End Effector Type [\%]": eef_df,
+            "   ": calc_times_df
+        }, axis=1)
 
 # Construct and save the latex table
 with pd.option_context("max_colwidth", 1000):
     latex_table = out_df.to_latex(index=False, header=True, column_format='l' + 'c' * len(pivot_df.columns[1:]), multicolumn_format='c',
                                 escape=False, longtable=False)
     latex_list = latex_table.splitlines()
-    latex_list.insert(3, '\\cmidrule(lr){2-5}')
+    if COMBINE_SHARP:
+        latex_list.insert(3, '\\cmidrule(lr){2-3}')
+    else:
+        latex_list.insert(3, '\\cmidrule(lr){2-5}')
     latex_table = '\n'.join(latex_list)
 
-with open('./data/ablation_results/summary_table.tex', 'w') as file:
+table_name = "summary_table"
+if COMBINE_SHARP:
+    table_name += "_sharp"
+
+with open(f'./data/ablation_results/{table_name}.tex', 'w') as file:
     file.write(latex_table)
 
-with open(PAPER_FOLDER + '/summary_table.tex', 'w') as file:
+with open(PAPER_FOLDER + f'/{table_name}.tex', 'w') as file:
     file.write(latex_table)

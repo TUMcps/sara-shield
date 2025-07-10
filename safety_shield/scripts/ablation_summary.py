@@ -12,7 +12,8 @@ from scipy.stats import bootstrap, shapiro, wilcoxon
 
 PAPER_FOLDER = '/home/jakob/Nextcloud/Promotion/Paper/General_Safety_Framework/Paper/results/ablation_study/'
 COMBINE_SHARP = True
-ADD_P_VALUE = False
+ADD_P_VALUE = True
+ADD_PROVABLY_SAFE = True
 
 
 # Method names
@@ -25,6 +26,20 @@ methods = {
   "SSM_humanreachTUMlab": "Dynamic SSM \cite{beckert_2017_OnlineVerification, thumm_2022_ProvablySafe}",
   "SWITCH_humanreachTUMlab": "Reduced-speed zone \cite{svarny_2019_SafePhysical}",
   "ZONESSM_humanreachTUMlab": "SSM zone \cite{iso_2021_RoboticsSafety}",
+}
+
+provably_safe_text = "\ding{51}"
+not_provably_safe_text = "\ding{53}"
+
+provably_safe = {
+  "OFF_humanreachTUMlab": not_provably_safe_text,
+  "PFL_humanreachTUMlab": provably_safe_text,
+  "PFL_humanreachablationnocontactclass": provably_safe_text,
+  "REDUCEDSPEED_humanreachTUMlab": not_provably_safe_text,
+  "REFLECTEDMASS_humanreachTUMlab": not_provably_safe_text,
+  "SSM_humanreachTUMlab": provably_safe_text,
+  "SWITCH_humanreachTUMlab": not_provably_safe_text,
+  "ZONESSM_humanreachTUMlab": provably_safe_text,
 }
 
 sorting = [
@@ -224,6 +239,11 @@ else:
 
 pivot_df.rename(columns=column_renames, inplace=True)
 
+# Build provably safe df
+pivot_df['ProvablySafe'] = pivot_df['Method'].apply(lambda x: provably_safe[x])
+provably_safe_df = pivot_df[['ProvablySafe']]
+provably_safe_df.rename(columns={'ProvablySafe': 'Provably safe w.r.t.~\cref{sec:assumptions}'}, inplace=True)
+
 # Rename methods
 pivot_df['Method'] = pivot_df['Method'].apply(lambda x: method_names[x])
 
@@ -234,24 +254,25 @@ if COMBINE_SHARP:
 else:
     eef_df = pivot_df[['Blunt', 'Edge', 'Sheet', 'Wedge']]
 calc_times_df = pivot_df[['Computation Time [ms]']]
+
+concat_dict = {
+  " ": method_df,
+  "Efficiency per End Effector Type [\%]": eef_df,
+}
+
 if ADD_P_VALUE:
     p_value_df = pivot_df[['p-value of H1']]
     p_val_rename = {'p-value of H1': 'p-value of \\textbf{{H1}}'}
     p_value_df.rename(columns=p_val_rename, inplace=True)
-    out_df = pd.concat(
-        {
-            " ": method_df,
-            "Efficiency per End Effector Type [\%]": eef_df,
-            "  ": p_value_df,
-            "   ": calc_times_df
-        }, axis=1)
-else:
-    out_df = pd.concat(
-        {
-            " ": method_df,
-            "Efficiency per End Effector Type [\%]": eef_df,
-            "   ": calc_times_df
-        }, axis=1)
+    concat_dict["  "] = p_value_df
+
+concat_dict["   "] = calc_times_df
+
+if ADD_PROVABLY_SAFE:
+    concat_dict["    "] = provably_safe_df
+
+out_df = pd.concat(concat_dict, axis=1)
+
 
 # Construct and save the latex table
 with pd.option_context("max_colwidth", 1000):

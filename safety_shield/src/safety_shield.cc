@@ -626,6 +626,10 @@ bool SafetyShield::verifySafety(Motion& current_motion, Motion& goal_motion, con
   bool is_safe = false;
   // Compute the robot reachable set for the potential trajectory
   std::vector<double> time_points = calcTimePointsForEquidistantIntervals(current_motion.getTime(), goal_motion.getTime(), reachability_set_duration_);
+  if (time_points.size() < 2) {
+    // Stopped motion
+    return true;
+  }
   std::vector<Motion> interval_edges_motions = getMotionsFromCurrentLTTandPath(time_points);
   robot_capsules_time_intervals_ = robot_reach_->reachTimeIntervals(interval_edges_motions, alpha_i);
   // Compute the human reachable sets for the potential trajectory

@@ -61,7 +61,7 @@ void get_meas_from_file(std::string file_path, int input_freq, std::vector<doubl
 
 int main(int argc, char* argv[]) {
 
-  std::string shield_type_str = "REFLECTEDMASS";
+  std::string shield_type_str = "PFL";
   safety_shield::ShieldType shield_type;
   if (argc >= 2) {
     shield_type_str = argv[1];
@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
     throw std::invalid_argument("Invalid shield type.");
   }
 
-  std::string contact_type_str = "EDGE";
+  std::string contact_type_str = "BLUNT";
   if (argc >= 3) {
     contact_type_str = argv[2];
   }
@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
   }
   std::string mocap_config_file = "../config/" + mocap_file_option + ".yaml";
 
-  std::string file_str = "vicon_p_1_puzzle_mocap";
+  std::string file_str = "vicon_p_3_robco_mocap";
   if (argc >= 5) {
     file_str = std::string(argv[4]);
   }

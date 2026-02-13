@@ -10,7 +10,8 @@ import numpy as np
 from scipy.stats import bootstrap, shapiro, wilcoxon
 
 
-PAPER_FOLDER = '/home/jakob/Nextcloud/Promotion/Paper/General_Safety_Framework/Paper/results/ablation_study/'
+PANDA = True
+PAPER_FOLDER = '/home/jakob/Nextcloud/Promotion/Paper/General_Safety_Framework/Paper/results/ablation_study_panda/'
 COMBINE_SHARP = True
 ADD_P_VALUE = True
 ADD_PROVABLY_SAFE = True
@@ -54,7 +55,10 @@ sorting = [
 
 methods_with_edge_only = ["SWITCH_humanreachTUMlab", "SSM_humanreachTUMlab", "REDUCEDSPEED_humanreachTUMlab", "ZONESSM_humanreachTUMlab"]
 
-result_table = pd.read_csv('./data/ablation_results/all_results.csv')
+if PANDA:
+    result_table = pd.read_csv('./data/ablation_results_panda/all_results.csv')
+else:
+    result_table = pd.read_csv('./data/ablation_results/all_results.csv')
 
 method_names = {
   "OFF_humanreachTUMlab": "OFF",
@@ -102,7 +106,10 @@ final_results = pd.merge(grouped_means, grouped_stds, on=['eef', 'method'])
 final_results = pd.merge(final_results, conf_intervals, on=['eef', 'method'])
 
 print(final_results)
-final_results.to_csv('./data/ablation_results/summary.csv', index=False)
+if PANDA:
+    final_results.to_csv('./data/ablation_results_panda/summary.csv', index=False)
+else:
+    final_results.to_csv('./data/ablation_results/summary.csv', index=False)
 
 # >>> Create latex table <<<
 # Remove the "OFF" method
@@ -289,8 +296,12 @@ table_name = "summary_table"
 if COMBINE_SHARP:
     table_name += "_sharp"
 
-with open(f'./data/ablation_results/{table_name}.tex', 'w') as file:
-    file.write(latex_table)
+if PANDA:
+    with open(f'./data/ablation_results_panda/{table_name}.tex', 'w') as file:
+        file.write(latex_table)
+else:
+    with open(f'./data/ablation_results/{table_name}.tex', 'w') as file:
+        file.write(latex_table)
 
 with open(PAPER_FOLDER + f'/{table_name}.tex', 'w') as file:
     file.write(latex_table)

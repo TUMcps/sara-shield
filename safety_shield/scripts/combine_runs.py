@@ -6,6 +6,9 @@ import csv
 import numpy as np
 
 
+PANDA = False
+
+
 def read_last_line(filename):
     with open(filename, 'rb') as file:
         file.seek(-2, os.SEEK_END)  # Go to the second last byte before EOF
@@ -28,7 +31,10 @@ def read_first_line(filename):
 
 
 # Define the pattern to match the CSV files in the specified directory
-path_s_csv_files = glob.glob('./data/ablation_results/vicon_p_*_mocap_*_path_s.csv')
+if not PANDA:
+    path_s_csv_files = glob.glob('./data/ablation_results/vicon_p_*_mocap_*_path_s.csv')
+else:
+    path_s_csv_files = glob.glob('./data/ablation_results_panda/vicon_p_*_mocap_*_path_s.csv')
 
 # Prepare an empty list to store data from each file
 data_list = []
@@ -80,4 +86,7 @@ for index, row in result_table.iterrows():
 
 # Display the result table
 print(result_table)
-result_table.to_csv('./data/ablation_results/all_results.csv', index=False)
+if not PANDA:
+    result_table.to_csv('./data/ablation_results/all_results.csv', index=False)
+else:
+    result_table.to_csv('./data/ablation_results_panda/all_results.csv', index=False)

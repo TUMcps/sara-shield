@@ -99,6 +99,9 @@ target_link_libraries(debug_real_world_setup ${PROJECT_NAME} long_term_planner s
 add_executable(ablation_study src/ablation_study.cc)
 target_link_libraries(ablation_study ${PROJECT_NAME} long_term_planner spdlog yaml-cpp)
 
+add_executable(ablation_study_panda src/ablation_study_panda.cc)
+target_link_libraries(ablation_study_panda ${PROJECT_NAME} long_term_planner spdlog yaml-cpp)
+
 #############
 ## GTest ##
 #############

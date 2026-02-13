@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 #include <time.h>
 
 #include "reach_lib.hpp"
@@ -199,6 +200,7 @@ int main(int argc, char* argv[]) {
   clock_t clkStart;
   clock_t clkFinish;
   std::ofstream myfile;
+  std::filesystem::create_directories(std::filesystem::path("../data/" + output_file_name + ".csv").parent_path());
   myfile.open("../data/" + output_file_name + ".csv");
   myfile << "time, path_s, is_safe, collision_type, calc_time, ";
   myfile << "q_1, q_2, q_3, q_4, q_5, q_6, ";

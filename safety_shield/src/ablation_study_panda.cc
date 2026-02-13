@@ -202,9 +202,9 @@ int main(int argc, char* argv[]) {
   std::filesystem::create_directories(std::filesystem::path("../data/" + output_file_name + ".csv").parent_path());
   myfile.open("../data/" + output_file_name + ".csv");
   myfile << "time, path_s, is_safe, collision_type, calc_time, ";
-  myfile << "q_1, q_2, q_3, q_4, q_5, q_6, ";
-  myfile << "dq_1, dq_2, dq_3, dq_4, dq_5, dq_6, ";
-  myfile << "ddq_1, ddq_2, ddq_3, ddq_4, ddq_5, ddq_6, ";
+  myfile << "q_1, q_2, q_3, q_4, q_5, q_6, q_7, ";
+  myfile << "dq_1, dq_2, dq_3, dq_4, dq_5, dq_6, dq_7, ";
+  myfile << "ddq_1, ddq_2, ddq_3, ddq_4, ddq_5, ddq_6, ddq_7, ";
   myfile << "human_pos_1_x, human_pos_1_y, human_pos_1_z, ";
   int n_human_caps = 8;
   for (int i = 0; i < n_human_caps; i++) {

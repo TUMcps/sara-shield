@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 
 
-PANDA = True
+PANDA = False
 BASE_FOLDER = "./data/ablation_results_panda" if PANDA else "./data/ablation_results"
 
 
@@ -155,11 +155,24 @@ def create_histograms(collision_df, summary_df):
         axes = axes.reshape(1, -1)
     axes = axes.flatten()
 
+    # Collect per-method histogram data for CSV export
+    method_histogram_rows = []
+
     for i, method in enumerate(methods):
         method_data = collision_df[collision_df['method'] == method]
 
         # Aggregate counts across all files for this method
         collision_totals = method_data.groupby('collision_type')['count'].sum()
+        total_steps = method_data.groupby('collision_type')['total_rows'].sum().iloc[0] if len(method_data) > 0 else 1
+        collision_percentages = (collision_totals / collision_totals.sum()) * 100
+
+        for collision_type in collision_totals.index:
+            method_histogram_rows.append({
+                'method': method,
+                'collision_type': collision_type,
+                'count': collision_totals[collision_type],
+                'percentage': collision_percentages[collision_type],
+            })
 
         # Create histogram
         ax = axes[i]
@@ -172,6 +185,11 @@ def create_histograms(collision_df, summary_df):
         for j, (collision_type, count) in enumerate(collision_totals.items()):
             ax.text(j, count + count*0.01, str(count), ha='center', va='bottom')
 
+    # Export per-method histogram data as CSV
+    method_histogram_df = pd.DataFrame(method_histogram_rows)
+    method_histogram_df.to_csv(f'{BASE_FOLDER}/collision_type_histograms.csv', index=False)
+    print(f"Histogram data saved to: {BASE_FOLDER}/collision_type_histograms.csv")
+
     # Hide unused subplots
     for i in range(n_methods, len(axes)):
         axes[i].set_visible(False)
@@ -183,6 +201,7 @@ def create_histograms(collision_df, summary_df):
     # Create overall histogram
     plt.figure(figsize=(10, 6))
     overall_totals = collision_df.groupby('collision_type')['count'].sum()
+    overall_percentages = (overall_totals / overall_totals.sum()) * 100
     overall_totals.plot(kind='bar', title='Overall Collision Type Distribution')
     plt.xlabel('Collision Type')
     plt.ylabel('Total Count')
@@ -191,6 +210,15 @@ def create_histograms(collision_df, summary_df):
     # Add count labels
     for i, (collision_type, count) in enumerate(overall_totals.items()):
         plt.text(i, count + count*0.01, str(count), ha='center', va='bottom')
+
+    # Export overall histogram data as CSV
+    overall_histogram_df = pd.DataFrame({
+        'collision_type': overall_totals.index,
+        'count': overall_totals.values,
+        'percentage': overall_percentages.values,
+    })
+    overall_histogram_df.to_csv(f'{BASE_FOLDER}/collision_type_overall_histogram.csv', index=False)
+    print(f"Overall histogram data saved to: {BASE_FOLDER}/collision_type_overall_histogram.csv")
 
     plt.tight_layout()
     plt.savefig(f'{BASE_FOLDER}/collision_type_overall_histogram.png', dpi=300, bbox_inches='tight')
@@ -207,4 +235,6 @@ if __name__ == "__main__":
     print("  - collision_type_summary_counts.csv (summary counts)")
     print("  - collision_type_summary_percentages.csv (summary percentages)")
     print("  - collision_type_histograms.png (histograms by method)")
+    print("  - collision_type_histograms.csv (histogram data with percentages by method)")
     print("  - collision_type_overall_histogram.png (overall histogram)")
+    print("  - collision_type_overall_histogram.csv (overall histogram data with percentages)")

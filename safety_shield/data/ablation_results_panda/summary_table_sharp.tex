@@ -1,0 +1,15 @@
+\begin{tabular}{lcccccccc}
+\toprule
+  & \multicolumn{2}{c}{Efficiency per End Effector Type [\%]} &    &     &      \\
+\cmidrule(lr){2-3}
+Method & Blunt & Sharp & p-value of \textbf{{H1}} & Computation Time [ms] & Provably safe w.r.t.~\cref{sec:assumptions} \\
+\midrule
+SSM zone \cite{iso_2021_RoboticsSafety} & 7.0 $\pm$ 11.1 & 7.0 $\pm$ 11.1 & 8.13e-12 & 0.11 $\pm$ 0.02 & \ding{51} \\
+Reduced-speed PFL \cite{iso_2021_RoboticsSafety} & 2.7 $\pm$ 3.4 & 2.7 $\pm$ 3.4 & 8.13e-12 & \textbf{0.09} $\pm$ 0.03 & \ding{53} \\
+Dynamic SSM \cite{beckert_2017_OnlineVerification, thumm_2022_ProvablySafe} & 76.0 $\pm$ 20.6 & 76.0 $\pm$ 20.6 & 8.13e-12 & 0.11 $\pm$ 0.03 & \ding{51} \\
+Reduced-speed zone \cite{svarny_2019_SafePhysical} & 55.4 $\pm$ 27.7 & 55.4 $\pm$ 27.7 & 8.13e-12 & 0.16 $\pm$ 0.06 & \ding{53} \\
+Reflected mass \cite{haddadin_2012_MakingRobots} & 75.9 $\pm$ 1.9 & 71.1 $\pm$ 5.0 & 1.10e-11 & 0.39 $\pm$ 0.11 & \ding{53} \\
+\shield{} without $c_{\mathrm{free}}$ & 89.8 $\pm$ 9.2 & 88.9 $\pm$ 9.6 & 8.15e-12 & 0.31 $\pm$ 0.05 & \ding{51} \\
+\shield{} (\textbf{ours}) & \textbf{92.3} $\pm$ 9.0 & \textbf{92.3} $\pm$ 8.9 & -- & 0.32 $\pm$ 0.05 & \ding{51} \\
+\bottomrule
+\end{tabular}

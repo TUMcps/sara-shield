@@ -46,4 +46,9 @@ cmake-build-release/
 
 safety_shield/data/ablation/
 safety_shield/data/ablation_results/vicon_*.csv
+safety_shield/data/ablation_results_panda/vicon_*.csv
+safety_shield/data/ablation_results_slow/vicon_*.csv
+safety_shield/data/real_world/
+safety_shield/data/real_world_results/
 
+*.zip

@@ -1,0 +1,13 @@
+method,collision_type,count,percentage
+OFF_humanreachTUMlab,0,900000,100.0
+SSM_humanreachTUMlab,0,900000,100.0
+PFL_humanreachablationnocontactclass,0,2829464,78.59622222222222
+PFL_humanreachablationnocontactclass,1,606931,16.859194444444444
+PFL_humanreachablationnocontactclass,2,163605,4.544583333333333
+PFL_humanreachTUMlab,0,3153544,88.32313577346574
+PFL_humanreachTUMlab,1,293575,8.222325290116517
+PFL_humanreachTUMlab,2,123343,3.4545389364177526
+SWITCH_humanreachTUMlab,0,900000,100.0
+REDUCEDSPEED_humanreachTUMlab,0,900000,100.0
+ZONESSM_humanreachTUMlab,0,900000,100.0
+REFLECTEDMASS_humanreachTUMlab,0,3574855,100.0

@@ -10,8 +10,9 @@ import numpy as np
 from scipy.stats import bootstrap, shapiro, wilcoxon
 
 
-PANDA = True
-PAPER_FOLDER = '/home/jakob/Nextcloud/Promotion/Paper/General_Safety_Framework/Paper/results/ablation_study_panda/'
+PANDA = False
+PAPER_BASE_FOLDER = '/home/jakob/Nextcloud/Promotion/Paper/General_Safety_Framework/Paper/results'
+PAPER_FOLDER = f'{PAPER_BASE_FOLDER}/ablation_study_panda/' if PANDA else f'{PAPER_BASE_FOLDER}/ablation_study/'
 COMBINE_SHARP = True
 ADD_P_VALUE = True
 ADD_PROVABLY_SAFE = True

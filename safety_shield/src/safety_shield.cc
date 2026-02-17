@@ -762,6 +762,7 @@ bool SafetyShield::verifyReflectedMassVelocity(std::vector<double> time_points, 
           u_point = robot_capsules_time_intervals_[t][c].p2_ - human_capsules_time_intervals_[0][m][b].p1_;
         }
         Eigen::Vector3d u(u_point.x, u_point.y, u_point.z);
+        u.normalize();
         // 2. Calculate v_POI from the desired EEF velocity (for simplicity, this is same as EEF velocity)
         RobotReach::SE3Vel v_POI = robot_capsule_velocities[c].v2;
         // 3. Calculate the inverse mass matrix of the EEF.

@@ -29,7 +29,7 @@ OFF_humanreachTUMlab,6,robco,30000,0,0,30000
 OFF_humanreachTUMlab,6,screwing,30000,0,0,30000
 OFF_humanreachTUMlab,6,stacking,30000,0,0,30000
 OFF_humanreachTUMlab,6,tower,30000,0,0,30000
-PFL_humanreachTUMlab,1,puzzle,84151,2929,3382,90462
+PFL_humanreachTUMlab,1,puzzle,111510,3900,4590,120000
 PFL_humanreachTUMlab,1,robco,107188,8701,4111,120000
 PFL_humanreachTUMlab,1,screwing,106302,7485,6213,120000
 PFL_humanreachTUMlab,1,stacking,116775,1360,1865,120000
@@ -119,7 +119,7 @@ REDUCEDSPEED_humanreachTUMlab,6,robco,30000,0,0,30000
 REDUCEDSPEED_humanreachTUMlab,6,screwing,30000,0,0,30000
 REDUCEDSPEED_humanreachTUMlab,6,stacking,30000,0,0,30000
 REDUCEDSPEED_humanreachTUMlab,6,tower,30000,0,0,30000
-REFLECTEDMASS_humanreachTUMlab,1,puzzle,94855,0,0,94855
+REFLECTEDMASS_humanreachTUMlab,1,puzzle,120000,0,0,120000
 REFLECTEDMASS_humanreachTUMlab,1,robco,120000,0,0,120000
 REFLECTEDMASS_humanreachTUMlab,1,screwing,120000,0,0,120000
 REFLECTEDMASS_humanreachTUMlab,1,stacking,120000,0,0,120000

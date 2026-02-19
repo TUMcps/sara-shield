@@ -6,7 +6,7 @@ import csv
 import numpy as np
 
 
-PANDA = True
+PANDA = False
 
 
 def read_last_line(filename):

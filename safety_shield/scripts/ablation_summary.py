@@ -147,25 +147,30 @@ df_sorted['mean_std'] = df_sorted.apply(lambda row: f"{row['mean_clean']} $\\pm$
 # Build the table to be columns = EEF type and rows = method
 pivot_df = df_sorted.pivot(index='method', columns='eef', values='mean_std').reset_index()
 
-# >>> Add caculation times <<<
+# >>> Add calculation times <<<
 mean_calc_times = []
-std_calc_times = []
+p999_calc_times = []
 for index, row in pivot_df.iterrows():
     method = row['method']
-    calc_times = result_table.loc[(result_table['method'] == method), 'step_time']
-    mean_calc_times.append(calc_times.mean() * 1000)
-    std_calc_times.append(calc_times.std() * 1000)
+    calc_data = result_table.loc[(result_table['method'] == method)]
+    mean_calc_times.append(calc_data['step_time'].mean() * 1000)
+    p999_calc_times.append(calc_data['p999_time'].max() * 1000)
 
 pivot_df['mean_calc'] = mean_calc_times
-pivot_df['std_calc'] = std_calc_times
+pivot_df['p999_calc'] = p999_calc_times
 
-# Make min calculation time bold
-min_calc_times = np.argmin(mean_calc_times)
-pivot_df['mean_clean_calc'] = pivot_df.apply(lambda row: f"{row['mean_calc']:.2f}", axis=1)
-pivot_df.loc[min_calc_times, 'mean_clean_calc'] = f"\\textbf{{{pivot_df.loc[min_calc_times, 'mean_calc']:.2f}}}"
+# Make min calculation time bold per column
+min_mean_idx = np.argmin(mean_calc_times)
+min_p999_idx = np.argmin(p999_calc_times)
 
-# Build the mean +/- std string
-pivot_df['Computation Time [ms]'] = pivot_df.apply(lambda row: f"{row['mean_clean_calc']} $\\pm$ {row['std_calc']:.2f}", axis=1)
+mean_fmt = [f"{v:.2f}" for v in mean_calc_times]
+mean_fmt[min_mean_idx] = f"\\textbf{{{mean_calc_times[min_mean_idx]:.2f}}}"
+
+p999_fmt = [f"{v:.2f}" for v in p999_calc_times]
+p999_fmt[min_p999_idx] = f"\\textbf{{{p999_calc_times[min_p999_idx]:.2f}}}"
+
+pivot_df['Mean'] = mean_fmt
+pivot_df['99.9th Pct.'] = p999_fmt
 
 # >>> Perform statistical hypothesis analysis <<<
 ours = "PFL_humanreachTUMlab"
@@ -261,7 +266,7 @@ if COMBINE_SHARP:
     eef_df = pivot_df[['Blunt', 'Sharp']]
 else:
     eef_df = pivot_df[['Blunt', 'Edge', 'Sheet', 'Wedge']]
-calc_times_df = pivot_df[['Computation Time [ms]']]
+calc_times_df = pivot_df[['Mean', '99.9th Pct.']]
 
 concat_dict = {
   " ": method_df,
@@ -274,7 +279,7 @@ if ADD_P_VALUE:
     p_value_df.rename(columns=p_val_rename, inplace=True)
     concat_dict["  "] = p_value_df
 
-concat_dict["   "] = calc_times_df
+concat_dict["Computation Time [ms]"] = calc_times_df
 
 if ADD_PROVABLY_SAFE:
     concat_dict["    "] = provably_safe_df
@@ -287,10 +292,13 @@ with pd.option_context("max_colwidth", 1000):
     latex_table = out_df.to_latex(index=False, header=True, column_format='l' + 'c' * len(pivot_df.columns[1:]), multicolumn_format='c',
                                 escape=False, longtable=False)
     latex_list = latex_table.splitlines()
-    if COMBINE_SHARP:
-        latex_list.insert(3, '\\cmidrule(lr){2-3}')
-    else:
-        latex_list.insert(3, '\\cmidrule(lr){2-5}')
+    eef_cols = 2 if COMBINE_SHARP else 4
+    p_val_cols = 1 if ADD_P_VALUE else 0
+    calc_start = 1 + eef_cols + p_val_cols + 1
+    calc_end = calc_start + 1
+    efficiency_cmidrule = f'\\cmidrule(lr){{2-{1 + eef_cols}}}'
+    calc_cmidrule = f'\\cmidrule(lr){{{calc_start}-{calc_end}}}'
+    latex_list.insert(3, f'{efficiency_cmidrule} {calc_cmidrule}')
     latex_table = '\n'.join(latex_list)
 
 table_name = "summary_table"

@@ -59,12 +59,13 @@ for file in path_s_csv_files:
     last_path_s = float(first_line[0])
     method = f'{mode}_{config}'
 
-    # Read in all calculation times (col: calc_time) 
+    # Read in all calculation times (col: calc_time)
     calc_times = pd.read_csv(file_normal, usecols=[' calc_time'], on_bad_lines='skip').values
-    data_list.append([method, n, task, mode, eef, config, last_path_s, np.median(calc_times)])
+    data_list.append([method, n, task, mode, eef, config, last_path_s, np.median(calc_times),
+                      np.max(calc_times), np.percentile(calc_times, 99.9)])
 
 # Create a DataFrame from the compiled data list
-columns = ['method', 'user', 'task', 'mode', 'eef', 'config', 'path_s', "step_time"]
+columns = ['method', 'user', 'task', 'mode', 'eef', 'config', 'path_s', "step_time", "worst_case_time", "p999_time"]
 result_table = pd.DataFrame(data_list, columns=columns)
 
 ## Calculate percentage of OFF method.

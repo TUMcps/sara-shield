@@ -1,15 +1,15 @@
 \begin{tabular}{lcccccccc}
 \toprule
-  & \multicolumn{2}{c}{Efficiency per End Effector Type [\%]} &    &     &      \\
-\cmidrule(lr){2-3}
-Method & Blunt & Sharp & p-value of \textbf{{H1}} & Computation Time [ms] & Provably safe w.r.t.~\cref{sec:assumptions} \\
+  & \multicolumn{2}{c}{Efficiency per End Effector Type [\%]} &    & \multicolumn{2}{c}{Computation Time [ms]} &      \\
+\cmidrule(lr){2-3} \cmidrule(lr){5-6}
+Method & Blunt & Sharp & p-value of \textbf{{H1}} & Mean & 99.9th Pct. & Provably safe w.r.t.~\cref{sec:assumptions} \\
 \midrule
-SSM zone \cite{iso_2021_RoboticsSafety} & 6.8 $\pm$ 10.7 & 6.8 $\pm$ 10.7 & 8.14e-12 & \textbf{0.12} $\pm$ 0.01 & \ding{51} \\
-Reduced-speed PFL \cite{iso_2021_RoboticsSafety} & 33.9 $\pm$ 9.8 & 33.9 $\pm$ 9.8 & 8.14e-12 & 0.14 $\pm$ 0.01 & \ding{53} \\
-Dynamic SSM \cite{beckert_2017_OnlineVerification, thumm_2022_ProvablySafe} & 59.2 $\pm$ 19.7 & 59.2 $\pm$ 19.7 & 8.14e-12 & 0.15 $\pm$ 0.05 & \ding{51} \\
-Reduced-speed zone \cite{svarny_2019_SafePhysical} & 62.2 $\pm$ 15.8 & 62.2 $\pm$ 15.8 & 8.14e-12 & 0.27 $\pm$ 0.05 & \ding{53} \\
-Reflected mass \cite{haddadin_2012_MakingRobots} & 83.4 $\pm$ 3.4 & 80.4 $\pm$ 4.7 & 1.10e-11 & 0.62 $\pm$ 0.08 & \ding{53} \\
-\shield{} without $c_{\mathrm{free}}$ & 82.3 $\pm$ 13.1 & 82.3 $\pm$ 7.8 & 8.15e-12 & 0.47 $\pm$ 0.11 & \ding{51} \\
-\shield{} (\textbf{ours}) & \textbf{92.6} $\pm$ 6.3 & \textbf{92.5} $\pm$ 6.2 & -- & 0.50 $\pm$ 0.14 & \ding{51} \\
+SSM zone \cite{iso_2021_RoboticsSafety} & 6.8 $\pm$ 10.7 & 6.8 $\pm$ 10.7 & 8.14e-12 & \textbf{0.12} & \textbf{0.95} & \ding{51} \\
+Reduced-speed PFL \cite{iso_2021_RoboticsSafety} & 33.9 $\pm$ 9.8 & 33.9 $\pm$ 9.8 & 8.14e-12 & 0.14 & 1.20 & \ding{53} \\
+Dynamic SSM \cite{beckert_2017_OnlineVerification, thumm_2022_ProvablySafe} & 59.2 $\pm$ 19.7 & 59.2 $\pm$ 19.7 & 8.14e-12 & 0.15 & 0.95 & \ding{51} \\
+Reduced-speed zone \cite{svarny_2019_SafePhysical} & 62.2 $\pm$ 15.8 & 62.2 $\pm$ 15.8 & 8.14e-12 & 0.27 & 1.48 & \ding{53} \\
+Reflected mass \cite{haddadin_2012_MakingRobots} & 83.4 $\pm$ 3.4 & 80.4 $\pm$ 4.7 & 1.10e-11 & 0.62 & 3.37 & \ding{53} \\
+\shield{} without $c_{\mathrm{free}}$ & 82.3 $\pm$ 13.1 & 82.3 $\pm$ 7.8 & 8.15e-12 & 0.47 & 3.07 & \ding{51} \\
+\shield{} (\textbf{ours}) & \textbf{92.6} $\pm$ 6.3 & \textbf{92.5} $\pm$ 6.2 & -- & 0.50 & 3.39 & \ding{51} \\
 \bottomrule
 \end{tabular}

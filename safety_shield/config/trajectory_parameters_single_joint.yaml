@@ -1,0 +1,29 @@
+robot_name: "iiwa"
+
+# Failsafe information
+max_s_stop: 0.2
+q_min_allowed: [-2.96706]
+q_max_allowed: [2.96706]
+v_max_allowed: [1.0]
+a_max_allowed: [10]
+j_max_allowed: [400]
+# Maximum long-term planning acc / jerk
+a_max_ltt: [2]
+j_max_ltt: [15]
+
+nb_joints: 1
+
+q1: [0.0]
+
+
+alpha_i_max: 5.0
+
+# safety-rated speed specified by iso-norm
+v_safe: 0.05
+
+# APPROXIMATE == 0
+# EXACT == 1
+velocity_method: 0
+
+# interval of time step depending on sampling time
+reachability_set_interval_size: 5

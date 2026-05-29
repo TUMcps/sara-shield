@@ -1,4 +1,4 @@
-robot_name: "iiwa"
+robot_name: "single_joint"
 
 # Failsafe information
 max_s_stop: 0.2

@@ -33,8 +33,8 @@ SARA shield comes in two major modes of operation:
 
 | Scenario | SSM (stop before contact) | PFL (SARA shield) |
 | --- | --- | --- |
-| Close-contact clamping | <video src="https://github.com/TUMcps/sara-shield/raw/main/img/clamping_close_ssm_cut_cropped_noaudio.mp4" width="406" controls></video> | <video src="https://github.com/TUMcps/sara-shield/raw/main/img/clamping_close_pfl_cropped_noaudio.mp4" width="406" controls></video> |
-| RobCo assembly task | <video src="https://github.com/TUMcps/sara-shield/raw/main/img/SSM_robco_cut_cropped_noaudio.mp4" width="406" controls></video> | <video src="https://github.com/TUMcps/sara-shield/raw/main/img/PFL_robco_cut_cropped_noaudio.mp4" width="406" controls></video> |
+| Close-contact clamping | <video src="https://github.com/user-attachments/assets/4cae9f82-639a-4053-bec6-47631632a615" width="406" controls></video> | <video src="https://github.com/user-attachments/assets/2d4e413f-bf5d-48fa-aa41-72271cfe088d" width="406" controls></video> |
+| RobCo assembly task | <video src="https://github.com/user-attachments/assets/39a68134-cffe-4d72-8916-3cb7fba72ecc" width="406" controls></video> | <video src="https://github.com/user-attachments/assets/a1677376-0fc9-453d-8f45-4c6941382dcb" width="406" controls></video> |
 
 In our real-world experiments, SARA shield completes collaborative tasks 15.9 % faster than the best-performing state-of-the-art approach while keeping the contact energy below injury thresholds.
 

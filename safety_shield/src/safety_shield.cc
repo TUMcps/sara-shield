@@ -660,21 +660,21 @@ bool SafetyShield::verifySafety(const LongTermTraj& sparse_trajectory) {
   if (shield_type_ == ShieldType::OFF) {
     return true;
   }
-  std::vector<Motion> interval_edges_motions = sparse_trajectory.getTrajectory();
-  std::vector<double> time_points = sparse_trajectory.getTimePoints();
+  interval_edge_motions_ = sparse_trajectory.getTrajectory();
+  time_points_ = sparse_trajectory.getTimePoints();
   // check trajectory for joint limits
-  if (!checkTrajectoryForJointLimits(interval_edges_motions)) {
+  if (!checkTrajectoryForJointLimits(interval_edge_motions_)) {
     return false;
   }
   bool is_safe = false;
   std::vector<double> alpha_i = sparse_trajectory.getAlphaI();
 
-  robot_capsules_time_intervals_ = robot_reach_->reachTimeIntervals(interval_edges_motions, alpha_i);
-  human_capsules_time_intervals_ = human_reach_->humanReachabilityAnalysisTimeIntervals(cycle_begin_time_, time_points);
+  robot_capsules_time_intervals_ = robot_reach_->reachTimeIntervals(interval_edge_motions_, alpha_i);
+  human_capsules_time_intervals_ = human_reach_->humanReachabilityAnalysisTimeIntervals(cycle_begin_time_, time_points_);
   int collision_index = -1;
   if (shield_type_ == ShieldType::PFL) {
     // Verify Enegry limits of potential contact scenarios
-    is_safe = verifyContactEnergySafetyByContactType(sparse_trajectory, time_points, collision_index);
+    is_safe = verifyContactEnergySafetyByContactType(sparse_trajectory, time_points_, collision_index);
   } else {
     // Verify if the robot and human reachable sets are collision free
     is_safe = verify_->verifyHumanReachTimeIntervals(robot_capsules_time_intervals_, human_capsules_time_intervals_,
@@ -894,6 +894,23 @@ LongTermTraj SafetyShield::buildTrajectory(const std::vector<Motion>& interval_e
                               a_max_allowed_, j_max_allowed_, sliding_window_k_, alpha_i_max_);
   }
   return trajectory;
+}
+
+std::vector<std::vector<double>> SafetyShield::computeCapsuleSpeedsTimeIntervals() {
+  std::vector<std::vector<double>> capsule_speeds;
+  capsule_speeds.reserve(interval_edge_motions_.size() - 1);
+  for (int i = 0; i < static_cast<int>(interval_edge_motions_.size()) - 1; ++i) {
+    robot_reach_->calculateAllTransformationMatricesAndCapsules(interval_edge_motions_[i].getAngleRef());
+    std::vector<RobotReach::CapsuleVelocity> cap_vels =
+        robot_reach_->calculateAllCapsuleVelocities(interval_edge_motions_[i].getVelocityRef());
+    std::vector<double> speeds;
+    speeds.reserve(cap_vels.size());
+    for (const auto& cap_vel : cap_vels) {
+      speeds.push_back(cap_vel.v1.v.norm());
+    }
+    capsule_speeds.push_back(std::move(speeds));
+  }
+  return capsule_speeds;
 }
 }  // namespace safety_shield
    // namespace safety_shield

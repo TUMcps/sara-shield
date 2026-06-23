@@ -176,7 +176,7 @@ if(BUILD_PYTHON_BINDINGS AND Python3_FOUND AND pybind11_FOUND)
 endif()
 
 # === Optional: Debug Executables ===
-foreach(exec debug self_constrained_collision_debug unconstrained_collision_debug hrgym_scenario_debug debug_real_world_setup)
+foreach(exec debug self_constrained_collision_debug unconstrained_collision_debug hrgym_scenario_debug debug_real_world_setup ablation_conformal_prediction_sets_panda)
   add_executable(${exec} src/${exec}.cc)
   target_link_libraries(${exec} ${PROJECT_NAME} spdlog yaml-cpp)
 endforeach()

@@ -287,6 +287,18 @@ class SafetyShield {
   std::vector<std::vector<reach_lib::Capsule>> human_capsules_;
 
   /**
+   * @brief Time points defining the edges of the sparse time intervals (gets updated in every step()).
+   * Size is N+1 for N intervals, relative to the start of the monitored trajectory.
+   */
+  std::vector<double> time_points_;
+
+  /**
+   * @brief Interval edge motions of the sparse trajectory (gets updated in every step()).
+   * Size is N+1 for N intervals. Used by computeCapsuleSpeedsTimeIntervals().
+   */
+  std::vector<Motion> interval_edge_motions_;
+
+  /**
    * @brief The worst-case contact type on the end effector.
    */
   ContactType eef_contact_type_;
@@ -433,16 +445,6 @@ class SafetyShield {
    * @returns bool: if the current motion lies in the bounds for replanning
    */
   bool checkCurrentMotionForReplanning(Motion& current_motion);
-
-  /**
-   * @brief Calculates a new trajectory from current joint state to desired goal state.
-   * @param start_motion The current current motion
-   * @param goal_motion The desired motion
-   * @param ltt The calculated long-term trajectory
-   * @return True if success, false otherwise
-   */
-  bool calculateLongTermTrajectory(const Motion& start_motion, const Motion& goal_motion,
-                                   LongTermTraj& ltt);
 
   /**
    * @brief Convert a capsule to a vector containing [p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, r]
@@ -763,6 +765,18 @@ class SafetyShield {
   void newLongTermTrajectory(const std::vector<double>& goal_position, const std::vector<double>& goal_velocity);
 
   /**
+   * @brief Calculates a long-term trajectory from start to goal and stores it in ltt.
+   * @details Uses the shield's current path_s and path_s_discrete as the starting index.
+   *    Call setLongTermTrajectory() afterwards to activate the computed trajectory.
+   * @param start_motion The starting motion (position, velocity at start)
+   * @param goal_motion The desired goal motion (position, velocity at goal)
+   * @param ltt Output: the computed long-term trajectory
+   * @return True if success, false otherwise
+   */
+  bool calculateLongTermTrajectory(const Motion& start_motion, const Motion& goal_motion,
+                                   LongTermTraj& ltt);
+
+  /**
    * @brief Overrides the current long-term trajectory.
    * @details Requires the robot to be at a complete stop, i.e. v=a=j=0.0 for all joints
    *    Requires the LTT to end in a complete stop.
@@ -886,6 +900,22 @@ class SafetyShield {
     }
     return all_capsules;
   }
+
+  /**
+   * @brief Get the sparse time points from the last step().
+   * @return std::vector<double> N+1 time points (relative to start of monitored trajectory) for N intervals.
+   */
+  inline std::vector<double> getTimePoints() const {
+    return time_points_;
+  }
+
+  /**
+   * @brief Compute the Cartesian speed of the first capsule endpoint for each interval and capsule.
+   * @details Calls calculateAllTransformationMatricesAndCapsules and calculateAllCapsuleVelocities on
+   * the stored interval_edge_motions_ from the last step(). Must be called after step().
+   * @return std::vector<std::vector<double>> [interval][capsule] speed (norm of linear velocity of v1).
+   */
+  std::vector<std::vector<double>> computeCapsuleSpeedsTimeIntervals();
 
   /**
    * @brief Get the Human Reach Capsules as a vector of [p1[0:3], p2[0:3], r]

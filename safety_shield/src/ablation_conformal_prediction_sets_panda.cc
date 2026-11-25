@@ -15,7 +15,7 @@
 #include "safety_shield/verify.h"
 
 int main() {
-  double sample_time = 0.001;
+  double sample_time = 0.004;
   std::string trajectory_config_file = std::string("../config/trajectory_parameters_panda.yaml");
   std::string robot_config_file = std::string("../config/robot_parameters_panda.yaml");
   std::string mocap_config_file = std::string("../config/mujoco_mocap.yaml");
